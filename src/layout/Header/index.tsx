@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import styled from "styled-components";
 import { darkTheme } from "@kleros/ui-components-library";
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <HeaderContainer>
-        <MobileHeader />    
+        <MobileHeader />
       </HeaderContainer>
     </Container>
   );

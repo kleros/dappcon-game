@@ -1,41 +1,42 @@
 "use client";
+import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { darkTheme } from "@kleros/ui-components-library";
 import KlerosLogo from "@/assets/kleros-pink.svg";
 import LightLinkButton from "@/components/LightLinkButton";
 
-export default function About() {
-  const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 20px 20px 0 20px;
-    text-align: center;
-    gap: 26px;
-  `;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 0 20px;
+  text-align: center;
+  gap: 26px;
+`;
 
-  const Heading = styled.h2`
-    font-weight: 400;
-  `;
+const Heading = styled.h2`
+  font-weight: 400;
+`;
 
-  const StyledH2 = styled.h2`
-    font-weight: 400;
-    color: ${darkTheme.klerosUIComponentsPrimaryBlue};
-  `;
+const StyledH2 = styled.h2`
+  font-weight: 400;
+  color: ${darkTheme.klerosUIComponentsPrimaryBlue};
+`;
 
-  const StyledText = styled.p`
-    font-weight: 200;
-  `;
+const StyledText = styled.p`
+  font-weight: 200;
+`;
 
-  const StyledLinkButton = styled(LightLinkButton)`
-    width: 100%;
-  `;
+const StyledLinkButton = styled(LightLinkButton)`
+  width: 100%;
+`;
 
-  const LogoContainer = styled.div`
-    display: "flex";
-    justifycontent: "center";
-  `;
+const LogoContainer = styled.div`
+  display: "flex";
+  justifycontent: "center";
+`;
 
+const About: React.FC = () => {
   return (
     <Container>
       <StyledText>About</StyledText>
@@ -58,4 +59,6 @@ export default function About() {
       <StyledLinkButton url="https://kleros.io/" text="Learn More" />
     </Container>
   );
-}
+};
+
+export default About;

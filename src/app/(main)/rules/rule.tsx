@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const StyledOl = styled.ol`
   list-style-type: decimal;
@@ -27,7 +27,7 @@ const StyledUlLi = styled.li`
   margin-bottom: 5px;
 `;
 
-const Rule = () => {
+const Rule: React.FC = () => {
   return (
     <StyledOl>
       <StyledLi>

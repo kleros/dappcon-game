@@ -1,17 +1,14 @@
 "use client";
+import React from "react";
 import styled from "styled-components";
 import Header from "@/layout/Header";
 import Footer from "@/layout/Footer";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const Container = styled.main`
-    height: 100vh;
-  `;
+const Container = styled.main`
+  height: 100vh;
+`;
 
+const Layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <Container>
       <Header />
@@ -19,4 +16,6 @@ export default function RootLayout({
       <Footer />
     </Container>
   );
-}
+};
+
+export default Layout;

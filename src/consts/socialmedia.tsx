@@ -2,7 +2,12 @@ import WebsiteLogo from "@/assets/socialmedia/website.svg";
 import TelegramLogo from "@/assets/socialmedia/telegram.svg";
 import XLogo from "@/assets/socialmedia/twitter.svg";
 
-export const socialmedia = {
+interface SocialMedia {
+  icon: string;
+  url: string;
+}
+
+export const socialmedia: Record<string, SocialMedia> = {
   etherscan: {
     icon: WebsiteLogo ,
     url: "https://kleros.io/",
