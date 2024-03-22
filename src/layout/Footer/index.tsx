@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
@@ -6,11 +6,11 @@ import { darkTheme } from "@kleros/ui-components-library";
 import LearnAboutKleros from "@/assets/learn-about-kleros.svg";
 import { socialmedia } from "@/consts/socialmedia";
 
-
-
 const Container = styled.div`
+  position: fixed;
   height: 122px;
   width: 100%;
+  bottom: 0;
   background-color: ${darkTheme.klerosUIComponentsPrimaryPurple};
   display: flex;
   flex-direction: column;
@@ -42,7 +42,12 @@ const Container = styled.div`
 `;
 
 const LearnMoreAboutKleros: React.FC = () => (
-  <a className="learn-more-about-kleros" href="https://kleros.io" target="_blank" rel="noreferrer">
+  <a
+    className="learn-more-about-kleros"
+    href="https://kleros.io"
+    target="_blank"
+    rel="noreferrer"
+  >
     <Image src={LearnAboutKleros} alt="Learn about Kleros" />
   </a>
 );

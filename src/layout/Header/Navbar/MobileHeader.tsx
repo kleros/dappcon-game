@@ -30,7 +30,7 @@ export function useOpenContext() {
   return useContext(OpenContext);
 }
 
-const MobileHeader = () => {
+const MobileHeader : React.FC = () => {
   const [isOpen, toggleIsOpen] = useToggle(false);
   const containerRef = useRef(null);
   useClickAway(containerRef, () => toggleIsOpen(false));
