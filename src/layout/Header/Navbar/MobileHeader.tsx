@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { useClickAway, useToggle } from "react-use";
-import HamburgerIcon from "@/assets/Menu.svg";
-import KlerosCourtLogo from "@/assets/kleros-court.svg";
+import HamburgerIcon from "@/assets/Menu.svg?url";
+import KlerosCourtLogo from "@/assets/kleros-court.svg?url";
 import NavBar from "./Navbar";
 
 const Container = styled.div`

@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { darkTheme } from "@kleros/ui-components-library";
-import LearnAboutKleros from "@/assets/learn-about-kleros.svg";
+import LearnAboutKleros from "@/assets/learn-about-kleros.svg?url";
 import { socialmedia } from "@/consts/socialmedia";
 
 const Container = styled.div`
