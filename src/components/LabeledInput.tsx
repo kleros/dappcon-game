@@ -17,6 +17,7 @@ const StyledField = styled(Field)`
   input {
     border: 1px solid #42498f;
     background-color: #220050;
+    color: white;
   }
 `;
 

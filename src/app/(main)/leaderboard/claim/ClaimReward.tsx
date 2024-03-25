@@ -40,15 +40,15 @@ const StyledLinkButton = styled(LightLinkButton)`
     fill: black;
   }
 `;
+interface ClaimRewardProps {
+  setClaimed: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const ClaimReward: React.FC<{ setClaimed: (isClaimed: boolean) => void }> = ({
-  setClaimed,
-}) => {
-
+const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
   const handleClaim = (): void => {
     setClaimed(true);
   };
-  
+
   return (
     <Container>
       <Heading>Claim my Rewards</Heading>
