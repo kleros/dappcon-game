@@ -7,28 +7,28 @@ import { leaderboardData, userData } from "@/consts/dummy-data";
 import Table from "./Table";
 import UserPoints from "./UserPoints";
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px 0 10px;
+  text-align: center;
+  font-weight: 200;
+  gap: 20px;
+  .button {
+    padding: 10px;
+  }
+`;
+
+const Heading = styled.h2`
+  font-weight: 400;
+`;
+
+const StyledLinkButton = styled(LightLinkButton)`
+  width: 100%;
+  margin-top: 28px;
+`;
+
 const Leaderboard: React.FC = () => {
-  const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 20px 10px 0 10px;
-    text-align: center;
-    font-weight: 200;
-    gap: 20px;
-    .button {
-      padding: 10px;
-    }
-  `;
-
-  const Heading = styled.h2`
-    font-weight: 400;
-  `;
-
-  const StyledLinkButton = styled(LightLinkButton)`
-    width: 100%;
-    margin-top: 28px;
-  `;
-
   return (
     <Container>
       <Heading>Leaderboard</Heading>
