@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Radio } from "@kleros/ui-components-library";
+import { darkTheme, Radio } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import { question } from "@/consts/dummy-data";
 
@@ -30,9 +30,11 @@ const StyledRadio = styled(Radio)`
   text-align: left;
   font-weight: 400;
   font-size: 16px;
-  &:checked {
-    background-color: #fff;
-    color: #fff;
+  & > input ~ span {
+    border: 1px solid ${darkTheme.klerosUIComponentsPrimaryBlue};
+  }
+  & > input:checked ~ span {
+    background: ${darkTheme.klerosUIComponentsPrimaryBlue};
   }
 `;
 

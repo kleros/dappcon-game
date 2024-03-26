@@ -22,6 +22,9 @@ const ScannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  .align-qrcode {
+    align-self: center;
+  }
 `;
 
 const Heading = styled.h2`
@@ -46,7 +49,7 @@ const Home: React.FC = () => {
       </ScannerContainer>
       <ScannerContainer>
         <StyledText>My QR</StyledText>
-        <QR />
+        <QR className="align-qrcode" />
       </ScannerContainer>
     </Container>
   );

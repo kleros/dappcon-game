@@ -23,6 +23,7 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: center;
   .divider-flipped {
     transform: rotateY(180deg);
     transform: rotateX(180deg);
@@ -57,7 +58,6 @@ interface WelcomeProps {
 }
 
 const Welcome: React.FC<WelcomeProps> = ({ setAuthenticated }) => {
-
   const handleStart = (): void => {
     setAuthenticated(true);
   };
