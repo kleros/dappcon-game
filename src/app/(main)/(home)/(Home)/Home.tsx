@@ -10,21 +10,16 @@ const Container = styled.div`
   padding: 20px 20px 0 20px;
   text-align: center;
   gap: 48px;
-  .marginTop {
-    margin-top: 36px;
-  }
-  .padding {
-    padding: 10px;
-  }
 `;
 
 const ScannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  .align-qrcode {
-    align-self: center;
-  }
+`;
+
+const StyledQR = styled(QR)`
+  align-self: center;
 `;
 
 const Heading = styled.h2`
@@ -49,7 +44,7 @@ const Home: React.FC = () => {
       </ScannerContainer>
       <ScannerContainer>
         <StyledText>My QR</StyledText>
-        <QR className="align-qrcode" />
+        <StyledQR />
       </ScannerContainer>
     </Container>
   );

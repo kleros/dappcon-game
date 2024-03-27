@@ -10,9 +10,6 @@ const Container = styled.div`
   padding: 20px 20px 0 20px;
   text-align: center;
   gap: 28px;
-  .button{
-    margin-top: 28px;
-  }
 `;
 
 const Points = styled.p`
@@ -32,6 +29,7 @@ const StyledText = styled.p`
 
 const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
+  margin-top: 28px;
 `;
 
 const Solved: React.FC = () => {
@@ -44,7 +42,7 @@ const Solved: React.FC = () => {
         Connect with more people, and answer the questions to increase your
         chances of winning the rewards.
       </StyledText>
-      <StyledLinkButton className="button" url="/" text="Continue" />
+      <StyledLinkButton url="/" text="Continue" />
     </Container>
   );
 };

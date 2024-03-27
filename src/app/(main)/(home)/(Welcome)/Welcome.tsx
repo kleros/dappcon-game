@@ -11,12 +11,6 @@ const Container = styled.div`
   padding: 20px 20px 0 20px;
   text-align: center;
   gap: 48px;
-  .marginTop {
-    margin-top: 36px;
-  }
-  .padding {
-    padding: 10px;
-  }
 `;
 
 const FormContainer = styled.div`
@@ -24,29 +18,26 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   align-items: center;
-  .divider-flipped {
-    transform: rotateY(180deg);
-    transform: rotateX(180deg);
-  }
-  .divider-margin-top {
-    margin-top: 20px;
-  }
-  .divider-margin-bottom {
-    margin-bottom: 20px;
-  }
 `;
 
 const Heading = styled.div`
-  .font-200 {
+  h2:first-child {
     font-weight: 200;
   }
-  .font-400 {
+
+  h2:last-child {
     font-weight: 400;
   }
 `;
 
 const StyledText = styled.p`
   font-weight: 200;
+`;
+
+const StyledDivider = styled(Divider)<{ top?: boolean; bottom?: boolean }>`
+  margin: ${({ top }) => (top ? "0 0 20px" : "20px 0 0")};
+  transform: ${({ bottom }) =>
+    bottom ? "rotateY(180deg) rotateX(180deg)" : "none"};
 `;
 
 const StyledLinkButton = styled(LightLinkButton)`
@@ -65,20 +56,15 @@ const Welcome: React.FC<WelcomeProps> = ({ setAuthenticated }) => {
   return (
     <Container>
       <Heading>
-        <h2 className="font-200">Welcome to</h2>
-        <h2 className="font-400">Kleros Schelling Game</h2>
+        <h2>Welcome to</h2>
+        <h2>Kleros Schelling Game</h2>
       </Heading>
       <FormContainer>
-        <Divider className="divider-margin-bottom" />
+        <StyledDivider top />
         <StyledText>Type your name to start</StyledText>
-        <LabeledInput
-          className="input"
-          name="Name"
-          label="Name"
-          placeholder="Bob"
-        />
+        <LabeledInput name="Name" label="Name" placeholder="Bob" />
         <StyledLinkButton text="Start" onClick={handleStart} />
-        <Divider className="divider-flipped divider-margin-top" />
+        <StyledDivider bottom />
       </FormContainer>
     </Container>
   );

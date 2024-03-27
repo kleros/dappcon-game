@@ -11,9 +11,6 @@ const Container = styled.div`
   padding: 20px 20px 0 20px;
   text-align: center;
   gap: 28px;
-  .button {
-    margin-top: 28px;
-  }
 `;
 
 const StyledQuestion = styled.h2`
