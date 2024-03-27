@@ -1,6 +1,6 @@
-import WebsiteLogo from "@/assets/socialmedia/website.svg";
-import TelegramLogo from "@/assets/socialmedia/telegram.svg";
-import XLogo from "@/assets/socialmedia/twitter.svg";
+import WebsiteLogo from "@/assets/socialmedia/website.svg?url";
+import TelegramLogo from "@/assets/socialmedia/telegram.svg?url";
+import XLogo from "@/assets/socialmedia/twitter.svg?url";
 
 interface SocialMedia {
   icon: string;

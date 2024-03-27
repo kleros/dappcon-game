@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { darkTheme } from "@kleros/ui-components-library";
-import KlerosLogo from "@/assets/kleros-pink.svg";
+import KlerosLogo from "@/assets/kleros-pink.svg?url";
 import LightLinkButton from "@/components/LightLinkButton";
 
 const Container = styled.div`
