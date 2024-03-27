@@ -14,9 +14,6 @@ const Container = styled.div`
   text-align: center;
   font-weight: 200;
   gap: 20px;
-  .button {
-    padding: 10px;
-  }
 `;
 
 const Heading = styled.h2`
@@ -34,13 +31,11 @@ const Leaderboard: React.FC = () => {
       <Heading>Leaderboard</Heading>
       <Table LeaderboardData={leaderboardData} />
       <UserPoints {...userData} />
-      <div className="button">
-        <StyledLinkButton
-          url="/leaderboard/claim"
-          Icon={RewardsIcon}
-          text="Claim my Rewards"
-        />
-      </div>
+      <StyledLinkButton
+        url="/leaderboard/claim"
+        Icon={RewardsIcon}
+        text="Claim my Rewards"
+      />
     </Container>
   );
 };
