@@ -10,12 +10,6 @@ const Container = styled.div`
   padding: 20px 20px 0 20px;
   text-align: center;
   gap: 26px;
-  .marginTop {
-    margin-top: 36px;
-  }
-  .padding {
-    padding: 10px;
-  }
 `;
 
 const Heading = styled.h2`
@@ -31,6 +25,11 @@ const StyledText = styled.p`
   font-weight: 200;
 `;
 
+const StyledMessage = styled(StyledText)`
+  margin-top: 36px;
+  padding: 10px;
+`;
+
 const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
@@ -41,9 +40,9 @@ const RewardClaimed: React.FC = () => {
       <StyledText>Well Done!</StyledText>
       <Heading>Rewards Claimed!</Heading>
       <StyledH2>300PNK</StyledH2>
-      <StyledText className="marginTop padding">
+      <StyledMessage>
         Claimed! Hold on. You will receive them before July 29, 2024.
-      </StyledText>
+      </StyledMessage>
       <StyledLinkButton
         className="marginTop"
         url="/leaderboard"

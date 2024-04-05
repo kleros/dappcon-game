@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { darkTheme } from "@kleros/ui-components-library";
-import { TableContainer, TableRow, TableCell } from "./Table";
+import { TableContainer, TableCellWrapper, TableCell } from "./Table";
 
 interface UserDataProps {
   rank: string;
@@ -18,6 +18,11 @@ const Container = styled.div`
   padding-top: 8px;
   background-color: ${darkTheme.klerosUIComponentsSecondaryPurple};
 `;
+const MyRank = styled(TableCell)`
+  color: ${darkTheme.klerosUIComponentsWhiteBackground};
+  font-weight: 400;
+  padding-right: 10px;
+`;
 
 const UserPoints: React.FC<UserDataProps> = ({
   rank,
@@ -29,19 +34,15 @@ const UserPoints: React.FC<UserDataProps> = ({
   return (
     <Container>
       <TableContainer>
-        <TableRow>
-          <div className="top10">
-            <TableCell className="my-rank">{rank}</TableCell>
-            <TableCell>{name}</TableCell>
-          </div>
-        </TableRow>
-        <TableRow>
-          <div className="points">
-            <TableCell>{connections}</TableCell>
-            <TableCell>{points}</TableCell>
-            <TableCell>{estimate}</TableCell>
-          </div>
-        </TableRow>
+        <TableCellWrapper rank>
+          <MyRank>{rank}</MyRank>
+          <TableCell>{name}</TableCell>
+        </TableCellWrapper>
+        <TableCellWrapper>
+          <TableCell>{connections}</TableCell>
+          <TableCell>{points}</TableCell>
+          <TableCell>{estimate}</TableCell>
+        </TableCellWrapper>
       </TableContainer>
     </Container>
   );
