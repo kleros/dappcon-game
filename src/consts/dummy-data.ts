@@ -6,6 +6,11 @@ export interface UserData {
   estimate: string;
 }
 
+export interface Question {
+  question: string;
+  options: string[];
+}
+
 export interface LeaderboardData {
   rank: string;
   name: string;
@@ -21,6 +26,12 @@ export const userData : UserData = {
     points: 3,
     estimate: "~300 PNK",
 }
+
+export const question : Question ={
+  question: "What's the most common method people use to store their cryptocurrency?",
+  options: ["Digital Wallet", "Hardware Wallet", "Paper Wallet", "Exchange Wallet", "Mobile Wallet"],
+}
+
 export const leaderboardData : LeaderboardData[] = [ {
     rank: "#1",
     name: "Bob",
