@@ -9,43 +9,24 @@ export const TableContainer = styled.div`
   grid-template-columns: 1fr 2fr;
   padding: 10px;
 `;
-export const TableHeader = styled.div`
-  gap: 10px;
-  .top10 {
-    text-align: left;
-  }
-  .points {
-    display: grid;
-    text-align: right;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .margin {
-    margin-bottom: 16px;
-  }
-`;
-export const TableRow = styled.div`
-  .top10 {
-    display: grid;
-    text-align: left;
-    grid-template-columns: 1fr 3fr;
-  }
-  .points {
-    display: grid;
-    text-align: right;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .ranks {
-    color: ${darkTheme.klerosUIComponentsSecondaryPurple};
-    font-weight: 400;
-  }
-  .my-rank {
-    color: ${darkTheme.klerosUIComponentsWhiteBackground};
-    font-weight: 400;
-    padding-right: 10px;
-  }
-`;
-export const TableCell = styled.div`
+
+export const TableCell = styled.div<{ rank?: boolean }>`
   padding-bottom: 8px;
+  font-weight: ${({ rank }) => (rank ? "600" : "200")};
+  color: ${({ rank }) => rank && darkTheme.klerosUIComponentsSecondaryPurple};
+`;
+
+export const TableCellWrapper = styled.div<{
+  rank?: boolean;
+  rankHeader?: boolean;
+}>`
+  display: grid;
+  grid-template-columns: ${({ rank }) => (rank ? "1fr 3fr" : "repeat(3, 1fr)")};
+
+  text-align: ${({ rankHeader, rank }) =>
+    rankHeader ? "left" : rank ? "left" : "right"};
+
+  ${({ rankHeader }) => rankHeader && "grid-template-columns: 1fr"};
 `;
 
 interface LeaderboardItem {
@@ -63,38 +44,31 @@ interface TableProps {
 const Table: React.FC<TableProps> = ({ LeaderboardData }) => {
   return (
     <TableContainer>
-      <TableHeader>
-        <div className="top10 margin">
-          <TableCell>Top 10</TableCell>
-        </div>
-      </TableHeader>
-      <TableHeader>
-        <div className="points margin">
-          <TableCell>Connections</TableCell>
-          <TableCell>Pts.</TableCell>
-          <TableCell>
-            Est. <RewardsIcon/>
-          </TableCell>
-        </div>
-      </TableHeader>
+      <TableCellWrapper rankHeader>
+        <TableCell>Top 10</TableCell>
+      </TableCellWrapper>
+      <TableCellWrapper>
+        <TableCell>Connections</TableCell>
+        <TableCell>Pts.</TableCell>
+        <TableCell>
+          Est. <RewardsIcon />
+        </TableCell>
+      </TableCellWrapper>
       {LeaderboardData.map((item) => (
-        <>
-          <TableRow key={item.rank}>
-            <div className="top10">
-              <TableCell className="ranks">{item.rank}</TableCell>
-              <TableCell>{item.name}</TableCell>
-            </div>
-          </TableRow>
-          <TableRow key={item.rank}>
-            <div className="points">
-              <TableCell>{item.connections}</TableCell>
-              <TableCell>{item.points}</TableCell>
-              <TableCell>{item.estimate}</TableCell>
-            </div>
-          </TableRow>
-        </>
+        <React.Fragment key={item.rank}>
+          <TableCellWrapper rank>
+            <TableCell rank>{item.rank}</TableCell>
+            <TableCell>{item.name}</TableCell>
+          </TableCellWrapper>
+          <TableCellWrapper>
+            <TableCell>{item.connections}</TableCell>
+            <TableCell>{item.points}</TableCell>
+            <TableCell>{item.estimate}</TableCell>
+          </TableCellWrapper>
+        </React.Fragment>
       ))}
     </TableContainer>
   );
 };
+
 export default Table;
