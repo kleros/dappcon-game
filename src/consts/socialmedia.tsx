@@ -1,24 +1,24 @@
+import React from "react";
 import WebsiteLogo from "@/assets/socialmedia/website.svg";
 import TelegramLogo from "@/assets/socialmedia/telegram.svg";
 import XLogo from "@/assets/socialmedia/twitter.svg";
 
 interface SocialMedia {
-  icon: string;
+  icon: React.ReactElement;
   url: string;
 }
 
 export const socialmedia: Record<string, SocialMedia> = {
   etherscan: {
-    icon: WebsiteLogo ,
+    icon: <WebsiteLogo />,
     url: "https://kleros.io/",
   },
   x: {
-    icon: XLogo ,
+    icon: <XLogo />,
     url: "https://x.com/kleros_io",
   },
   telegram: {
-    icon: TelegramLogo ,
+    icon: <TelegramLogo />,
     url: "https://t.me/kleros",
   },
-  
 };

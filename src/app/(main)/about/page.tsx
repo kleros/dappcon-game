@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
-import Image from "next/image";
 import { darkTheme } from "@kleros/ui-components-library";
 import KlerosLogo from "@/assets/kleros-pink.svg";
 import LightLinkButton from "@/components/LightLinkButton";
@@ -41,7 +40,7 @@ const About: React.FC = () => {
     <Container>
       <StyledText>About</StyledText>
       <LogoContainer>
-        <Image src={KlerosLogo} alt="kleros" />
+        <KlerosLogo />
       </LogoContainer>
       <Heading>
         Kleros is a decentralized arbitration service for the disputes of the

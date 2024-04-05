@@ -1,7 +1,6 @@
-"use client"
+"use client";
 import React, { useContext, useMemo, useRef } from "react";
 import styled from "styled-components";
-import Image from "next/image";
 import Link from "next/link";
 import { useClickAway, useToggle } from "react-use";
 import HamburgerIcon from "@/assets/Menu.svg";
@@ -16,7 +15,7 @@ const Container = styled.div`
 `;
 
 const StyledHamburger = styled.a`
-padding: 0;
+  padding: 0;
 `;
 
 const OpenContext = React.createContext({
@@ -30,17 +29,24 @@ export function useOpenContext() {
   return useContext(OpenContext);
 }
 
-const MobileHeader : React.FC = () => {
+const MobileHeader: React.FC = () => {
   const [isOpen, toggleIsOpen] = useToggle(false);
   const containerRef = useRef(null);
   useClickAway(containerRef, () => toggleIsOpen(false));
-  const memoizedContext = useMemo(() => ({ isOpen, toggleIsOpen }), [isOpen, toggleIsOpen]);
+  const memoizedContext = useMemo(
+    () => ({ isOpen, toggleIsOpen }),
+    [isOpen, toggleIsOpen]
+  );
   return (
     <Container ref={containerRef}>
       <OpenContext.Provider value={memoizedContext}>
-        <Link href="/"><Image src={KlerosCourtLogo} alt="Kleros Court"/></Link>
-        <NavBar /> 
-        <StyledHamburger onClick={toggleIsOpen}><Image src={HamburgerIcon} alt="Menu"/></StyledHamburger> 
+        <Link href="/">
+          <KlerosCourtLogo />
+        </Link>
+        <NavBar />
+        <StyledHamburger onClick={toggleIsOpen}>
+          <HamburgerIcon />
+        </StyledHamburger>
       </OpenContext.Provider>
     </Container>
   );
