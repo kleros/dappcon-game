@@ -29,6 +29,10 @@ alter table "public"."leaderboard" validate constraint "public_leaderboard_usern
 
 alter table "public"."users" add constraint "users_username_key" UNIQUE using index "users_username_key";
 
+alter table "public"."users" add constraint "users_username_check" CHECK ((length(username) >= 3)) not valid;
+
+alter table "public"."users" validate constraint "users_username_check";
+
 set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.add_user_to_leaderboard()
