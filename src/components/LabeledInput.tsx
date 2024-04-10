@@ -31,13 +31,17 @@ const StyledLabel = styled.label`
 interface ILabeledInput extends FieldProps {
   label?: string;
 }
-const LabeledInput: React.FC<ILabeledInput> = ({ label }) => {
+const LabeledInput: React.FC<ILabeledInput> = ({
+  label,
+  className,
+  ...props
+}) => {
   return (
-    <Container>
+    <Container {...{ className }}>
       {!isUndefined(label) ? (
         <StyledLabel id={label}>{label}</StyledLabel>
       ) : null}
-      <StyledField {...{ label }} id={label} />
+      <StyledField {...{ label, ...props }} id={label} />
     </Container>
   );
 };

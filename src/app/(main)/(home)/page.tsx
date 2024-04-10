@@ -1,20 +1,53 @@
 "use client";
-import React, { useState } from "react";
-import Welcome from "./(Welcome)/Welcome";
-import Home from "./(Home)/Home";
+import React from "react";
+import styled from "styled-components";
+import QR from "@/assets/qr.svg";
+import LightLinkButton from "@/components/LightLinkButton";
 
-const Main: React.FC = () => {
-  const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 0 20px;
+  text-align: center;
+  gap: 48px;
+`;
 
+const ScannerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const StyledQR = styled(QR)`
+  align-self: center;
+`;
+
+const Heading = styled.h2`
+  font-weight: 400;
+`;
+
+const StyledText = styled.p`
+  font-weight: 400;
+`;
+
+const StyledLinkButton = styled(LightLinkButton)`
+  width: 100%;
+`;
+
+const Home: React.FC = () => {
   return (
-    <>
-      {isAuthenticated ? (
-        <Home />
-      ) : (
-        <Welcome setAuthenticated={setAuthenticated} />
-      )}
-    </>
+    <Container>
+      <Heading>Kleros Schelling Game</Heading>
+      <ScannerContainer>
+        <StyledText>Scan another player</StyledText>
+        <StyledLinkButton url="question/4654v45e454" text="Scan" />
+      </ScannerContainer>
+      <ScannerContainer>
+        <StyledText>My QR</StyledText>
+        <StyledQR />
+      </ScannerContainer>
+    </Container>
   );
 };
 
-export default Main;
+export default Home;
