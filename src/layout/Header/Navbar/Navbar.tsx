@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Image from "next/image";
 import { darkTheme } from "@kleros/ui-components-library";
-import UserIcon from "@/assets/user.svg?url";
-import ConnectionsIcon from "@/assets/connections.svg?url";
+import UserIcon from "@/assets/user.svg";
+import ConnectionsIcon from "@/assets/connections.svg";
 import { Overlay } from "@/components/Overlay";
 import Explore from "@/layout/Header/Navbar/Explore";
 import { useOpenContext } from "./MobileHeader";
@@ -40,14 +39,11 @@ const Container = styled.div<{ isOpen: boolean }>`
   transition-duration: ${darkTheme.klerosUIComponentsTransitionSpeed};
   transition-timing-function: ease;
   padding: 24px;
-
-  hr {
-    margin: 24px 0;
-  }
 `;
 
 const StyledDivider = styled.hr`
   border: 1px solid ${darkTheme.klerosUIComponentsStroke};
+  margin: 24px 0;
 `;
 
 const StyledItems = styled.div`
@@ -78,10 +74,10 @@ const NavBar: React.FC = () => {
         <StyledOverlay />
         <Container {...{ isOpen }}>
           <StyledItems>
-            <Image src={UserIcon} alt="User" /> Vaitalik.eth
+            <UserIcon /> Vaitalik.eth
           </StyledItems>
           <StyledItems>
-            <Image src={ConnectionsIcon} alt="Connections" /> 21 Connections
+            <ConnectionsIcon /> 21 Connections
           </StyledItems>
           <StyledDivider />
           <Explore />
