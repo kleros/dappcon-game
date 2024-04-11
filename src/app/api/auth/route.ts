@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { UUID } from "crypto";
 import {
-  isUserExist,
+  checkUserExists,
   getUser,
   setUser,
   getConnections,
@@ -27,12 +27,12 @@ export const POST = async (request: NextRequest) => {
     });
   }
 
-  if (await isUserExist(user_id!)) {
+  if (await checkUserExists(user_id!)) {
     const user = await getUser(user_id!);
     if (user.error) {
       return new Response(user.error.details, { status: 500 });
     }
-    if (user.data.username !== username) {
+    if (user.data?.username !== username) {
       return new Response("Invalid username, Try again with correct one!", {
         status: 403,
       });
