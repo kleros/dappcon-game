@@ -21,6 +21,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts","global.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/qr-generator.js"],
+  "include": [
+    "next-env.d.ts",
+    "global.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "scripts/qr-generator.js",
+    "src/app/api/auth/route.ts"
+  ],
   "exclude": ["node_modules"]
 }
