@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
+import { Database } from "@/types/supabase";
 import { UUID } from "crypto";
 
-const supabase = createClient(
+const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
 );
@@ -22,7 +23,7 @@ export const getUser = async (user_id: UUID) => {
   return { data, error };
 };
 
-export const isUserExist = async (user_id: UUID) => {
+export const checkUserExists = async (user_id: UUID) => {
   const { data } = await getUser(user_id);
   if (data) {
     return true;
