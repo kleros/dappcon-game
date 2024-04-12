@@ -52,7 +52,7 @@ const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
 
-const Welcome: React.FC = () => {
+const Auth: React.FC = () => {
   const { authenticate, isLoading } = useAuthentication();
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string | null>(null);
@@ -105,4 +105,4 @@ const Welcome: React.FC = () => {
   );
 };
 
-export default Welcome;
+export default Auth;
