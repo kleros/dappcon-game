@@ -6,7 +6,6 @@ import RewardsDarkIcon from "@/assets/rewards-dark.svg";
 import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import LabeledInput from "@/components/LabeledInput";
-import { userData } from "@/consts/dummy-data";
 import { TableContainer, TableCellWrapper, TableCell } from "../Table";
 import UserPoints from "../UserPoints";
 
@@ -64,7 +63,7 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
           </TableCell>
         </TableCellWrapper>
       </TableContainer>
-      <UserPoints {...userData} />
+      <UserPoints />
       <ClaimAmount>Amount: 300 PNK</ClaimAmount>
       <ClaimSection>
         Type the address you want to receive the rewards

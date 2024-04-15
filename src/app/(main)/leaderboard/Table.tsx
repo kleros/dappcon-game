@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import RewardsIcon from "@/assets/rewards.svg";
 import { darkTheme } from "@kleros/ui-components-library";
 
@@ -30,18 +31,22 @@ export const TableCellWrapper = styled.div<{
 `;
 
 interface LeaderboardItem {
-  rank: string;
-  name: string;
+  username: string;
   connections: number;
   points: number;
-  estimate: string;
+  token: number;
 }
 
-interface TableProps {
-  LeaderboardData: LeaderboardItem[];
-}
+const Table: React.FC = () => {
+  const { isPending, error, data } = useQuery<LeaderboardItem[]>({
+    queryKey: ["leaderboardData"],
+    queryFn: () => fetch("/api/leaderboard").then((res) => res.json()),
+  });
 
-const Table: React.FC<TableProps> = ({ LeaderboardData }) => {
+  if (isPending) return <div>Loading...</div>;
+
+  if (error) return <div>an error occured</div>;
+
   return (
     <TableContainer>
       <TableCellWrapper rankHeader>
@@ -54,16 +59,16 @@ const Table: React.FC<TableProps> = ({ LeaderboardData }) => {
           Est. <RewardsIcon />
         </TableCell>
       </TableCellWrapper>
-      {LeaderboardData.map((item) => (
-        <React.Fragment key={item.rank}>
+      {data?.map((item, index) => (
+        <React.Fragment key={index}>
           <TableCellWrapper rank>
-            <TableCell rank>{item.rank}</TableCell>
-            <TableCell>{item.name}</TableCell>
+            <TableCell rank>#{index + 1}</TableCell>
+            <TableCell>{item.username.length > 8 ? `${item.username.slice(0, 8)}...` : item.username}</TableCell>
           </TableCellWrapper>
           <TableCellWrapper>
             <TableCell>{item.connections}</TableCell>
             <TableCell>{item.points}</TableCell>
-            <TableCell>{item.estimate}</TableCell>
+            <TableCell>~{item.token} PNK</TableCell>
           </TableCellWrapper>
         </React.Fragment>
       ))}

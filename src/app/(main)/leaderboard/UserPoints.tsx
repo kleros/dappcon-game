@@ -1,16 +1,10 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
+import useAuthentication from "@/hooks/useAuthentication";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
-
-interface UserDataProps {
-  rank: string;
-  name: string;
-  connections: number;
-  points: number;
-  estimate: string;
-}
 
 const Container = styled.div`
   border: 2px solid ${darkTheme.klerosUIComponentsSecondaryBlue};
@@ -24,24 +18,41 @@ const MyRank = styled(TableCell)`
   padding-right: 10px;
 `;
 
-const UserPoints: React.FC<UserDataProps> = ({
-  rank,
-  name,
-  connections,
-  points,
-  estimate,
-}) => {
+interface UserItem {
+  username: string;
+  connections: number;
+  points: number;
+  token: number;
+  rank: number;
+}
+
+const UserPoints: React.FC = () => {
+  const { username } = useAuthentication();
+  const { isPending, error, data } = useQuery<UserItem>({
+    queryKey: ["userstats"],
+    queryFn: () =>
+      fetch(`/api/userstats?username=${username}`).then((res) => res.json()),
+  });
+
+  if (isPending) return <div>please wait...</div>;
+
+  if (error) return <div>{error.message} an error occured</div>;
+
   return (
     <Container>
       <TableContainer>
         <TableCellWrapper rank>
-          <MyRank>{rank}</MyRank>
-          <TableCell>{name}</TableCell>
+          <MyRank>#{data.rank}</MyRank>
+          <TableCell>
+            {data.username.length > 8
+              ? `${data.username.slice(0, 8)}...`
+              : data.username}
+          </TableCell>
         </TableCellWrapper>
         <TableCellWrapper>
-          <TableCell>{connections}</TableCell>
-          <TableCell>{points}</TableCell>
-          <TableCell>{estimate}</TableCell>
+          <TableCell>{data.connections}</TableCell>
+          <TableCell>{data.points}</TableCell>
+          <TableCell>~{data.token}PNK</TableCell>
         </TableCellWrapper>
       </TableContainer>
     </Container>

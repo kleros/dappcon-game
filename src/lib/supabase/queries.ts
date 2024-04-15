@@ -40,3 +40,20 @@ export const getConnections = async (username: string) => {
     .single();
   return { data, error };
 };
+
+export const getLeaderboard = async () => {
+  const { data, error } = await supabase
+    .from("leaderboard")
+    .select()
+    .order("points", { ascending: false })
+    .limit(10);
+  return { data, error };
+};
+
+export const getUserStats = async (username: string) => {
+  const { data, error } = await supabase.rpc("get_user_stats", {
+    username_param: username,
+  });
+
+  return { data, error };
+};
