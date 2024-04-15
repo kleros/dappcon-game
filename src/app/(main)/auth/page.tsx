@@ -8,6 +8,8 @@ import LightLinkButton from "@/components/LightLinkButton";
 import useAuthentication from "@/hooks/useAuthentication";
 import { toast } from "react-toastify";
 
+const MIN_USERNAME_LENGTH = 3;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,7 +61,6 @@ const Auth: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token") || "";
-  const MIN_USERNAME_LENGTH = 3;
 
   const handleStart = async () => {
     if (username.length < MIN_USERNAME_LENGTH) {
