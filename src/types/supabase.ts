@@ -88,7 +88,7 @@ export type Database = {
     Functions: {
       get_user_stats: {
         Args: {
-          username_param: string
+          user_id_params: string
         }
         Returns: {
           username: string
