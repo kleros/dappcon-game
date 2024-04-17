@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Divider from "@/assets/divider.svg";
 import LabeledInput from "@/components/LabeledInput";
 import LightLinkButton from "@/components/LightLinkButton";
@@ -58,9 +58,13 @@ const Auth: React.FC = () => {
   const { authenticate, isLoading } = useAuthentication();
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
+  const [token, setToken] = useState<string>("");
   const router = useRouter();
-  const token = searchParams.get("token") || "";
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setToken(searchParams.get("token") || "");
+  }, []);
 
   const handleStart = async () => {
     if (username.length < MIN_USERNAME_LENGTH) {
