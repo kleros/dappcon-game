@@ -55,18 +55,6 @@ const StyledItems = styled.div`
   gap: 16px;
 `;
 
-export interface ISettings {
-  toggleIsSettingsOpen: () => void;
-}
-
-export interface IHelp {
-  toggleIsHelpOpen: () => void;
-}
-
-export interface IDappList {
-  toggleIsDappListOpen: () => void;
-}
-
 interface UserItem {
   username: string;
   connections: number;
