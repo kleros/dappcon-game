@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/navigation";
 import Divider from "@/assets/divider.svg";
 import LabeledInput from "@/components/LabeledInput";
 import LightLinkButton from "@/components/LightLinkButton";
@@ -59,7 +58,6 @@ const Auth: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [token, setToken] = useState<string>("");
-  const router = useRouter();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -77,7 +75,8 @@ const Auth: React.FC = () => {
 
     try {
       await authenticate(username, token);
-      router.push("/");
+      toast.success("Authenticated successfully , Redirecting...");
+      window.location.reload();
     } catch (error: any) {
       toast.error(error.message);
     }
