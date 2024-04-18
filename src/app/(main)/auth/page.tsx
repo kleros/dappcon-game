@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useSearchParams, useRouter } from "next/navigation";
 import Divider from "@/assets/divider.svg";
 import LabeledInput from "@/components/LabeledInput";
 import LightLinkButton from "@/components/LightLinkButton";
 import useAuthentication from "@/hooks/useAuthentication";
 import { toast } from "react-toastify";
+
+const MIN_USERNAME_LENGTH = 3;
 
 const Container = styled.div`
   display: flex;
@@ -56,10 +57,12 @@ const Auth: React.FC = () => {
   const { authenticate, isLoading } = useAuthentication();
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string | null>(null);
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const token = searchParams.get("token") || "";
-  const MIN_USERNAME_LENGTH = 3;
+  const [token, setToken] = useState<string>("");
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setToken(searchParams.get("token") || "");
+  }, []);
 
   const handleStart = async () => {
     if (username.length < MIN_USERNAME_LENGTH) {
@@ -72,7 +75,8 @@ const Auth: React.FC = () => {
 
     try {
       await authenticate(username, token);
-      router.push("/");
+      toast.success("Authenticated successfully , Redirecting...");
+      window.location.reload();
     } catch (error: any) {
       toast.error(error.message);
     }

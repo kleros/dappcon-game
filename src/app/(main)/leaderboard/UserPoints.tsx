@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
-import useAuthentication from "@/hooks/useAuthentication";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
 
 const Container = styled.div`
@@ -27,11 +26,9 @@ interface UserItem {
 }
 
 const UserPoints: React.FC = () => {
-  const { username } = useAuthentication();
   const { isPending, error, data } = useQuery<UserItem>({
     queryKey: ["userstats"],
-    queryFn: () =>
-      fetch(`/api/userstats?username=${username}`).then((res) => res.json()),
+    queryFn: () => fetch("/api/userstats").then((res) => res.json()),
   });
 
   if (isPending) return <div>please wait...</div>;

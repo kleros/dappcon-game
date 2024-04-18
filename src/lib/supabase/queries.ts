@@ -50,9 +50,9 @@ export const getLeaderboard = async () => {
   return { data, error };
 };
 
-export const getUserStats = async (username: string) => {
+export const getUserStats = async (user_id: string) => {
   const { data, error } = await supabase.rpc("get_user_stats", {
-    username_param: username,
+    user_id_params: user_id,
   });
 
   return { data, error };
