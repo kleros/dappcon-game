@@ -77,10 +77,8 @@ const Auth: React.FC = () => {
 
     try {
       await authenticate(username, token);
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
       toast.success("Authenticated successfully , Redirecting...");
+      window.location.reload();
     } catch (error: any) {
       toast.error(error.message);
     }
