@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
+import { Database } from "@/types/supabase";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
 
 const Container = styled.div`
@@ -17,13 +18,7 @@ const MyRank = styled(TableCell)`
   padding-right: 10px;
 `;
 
-interface UserItem {
-  username: string;
-  connections: number;
-  points: number;
-  token: number;
-  rank: number;
-}
+type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"];
 
 const UserPoints: React.FC = () => {
   const { isPending, error, data } = useQuery<UserItem>({
