@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import RewardsIcon from "@/assets/rewards.svg";
 import { darkTheme } from "@kleros/ui-components-library";
+import { Database } from "@/types/supabase";
 
 export const TableContainer = styled.div`
   display: grid;
@@ -30,12 +31,7 @@ export const TableCellWrapper = styled.div<{
   ${({ rankHeader }) => rankHeader && "grid-template-columns: 1fr"};
 `;
 
-interface LeaderboardItem {
-  username: string;
-  connections: number;
-  points: number;
-  token: number;
-}
+type LeaderboardItem = Database["public"]["Tables"]["leaderboard"]["Row"];
 
 const Table: React.FC = () => {
   const { isPending, error, data } = useQuery<LeaderboardItem[]>({
@@ -59,7 +55,7 @@ const Table: React.FC = () => {
           Est. <RewardsIcon />
         </TableCell>
       </TableCellWrapper>
-      {data?.map((item, index) => (
+      {data?.map((item: LeaderboardItem, index: number) => (
         <React.Fragment key={index}>
           <TableCellWrapper rank>
             <TableCell rank>#{index + 1}</TableCell>
