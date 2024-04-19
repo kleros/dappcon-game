@@ -57,3 +57,11 @@ export const getUserStats = async (user_id: string) => {
 
   return { data, error };
 };
+
+export const claimRewards = async (user_id: string, address: string) => {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ address })
+    .eq("user_id", user_id);
+  return { data, error };
+};
