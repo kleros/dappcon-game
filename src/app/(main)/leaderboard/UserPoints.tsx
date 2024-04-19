@@ -18,7 +18,7 @@ const MyRank = styled(TableCell)`
   padding-right: 10px;
 `;
 
-type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"];
+type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"][0];
 
 const UserPoints: React.FC = () => {
   const { isPending, error, data } = useQuery<UserItem>({
