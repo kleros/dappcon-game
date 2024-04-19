@@ -86,7 +86,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_stats: {
+        Args: {
+          user_id_params: string
+        }
+        Returns: {
+          username: string
+          connections: number
+          points: number
+          token: number
+          rank: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

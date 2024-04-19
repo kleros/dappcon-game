@@ -1,16 +1,10 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
+import { Database } from "@/types/supabase";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
-
-interface UserDataProps {
-  rank: string;
-  name: string;
-  connections: number;
-  points: number;
-  estimate: string;
-}
 
 const Container = styled.div`
   border: 2px solid ${darkTheme.klerosUIComponentsSecondaryBlue};
@@ -24,24 +18,33 @@ const MyRank = styled(TableCell)`
   padding-right: 10px;
 `;
 
-const UserPoints: React.FC<UserDataProps> = ({
-  rank,
-  name,
-  connections,
-  points,
-  estimate,
-}) => {
+type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"][0];
+
+const UserPoints: React.FC = () => {
+  const { isPending, error, data } = useQuery<UserItem>({
+    queryKey: ["userstats"],
+    queryFn: () => fetch("/api/userstats").then((res) => res.json()),
+  });
+
+  if (isPending) return <div>please wait...</div>;
+
+  if (error) return <div>{error.message} an error occured</div>;
+
   return (
     <Container>
       <TableContainer>
         <TableCellWrapper rank>
-          <MyRank>{rank}</MyRank>
-          <TableCell>{name}</TableCell>
+          <MyRank>#{data.rank}</MyRank>
+          <TableCell>
+            {data.username.length > 8
+              ? `${data.username.slice(0, 8)}...`
+              : data.username}
+          </TableCell>
         </TableCellWrapper>
         <TableCellWrapper>
-          <TableCell>{connections}</TableCell>
-          <TableCell>{points}</TableCell>
-          <TableCell>{estimate}</TableCell>
+          <TableCell>{data.connections}</TableCell>
+          <TableCell>{data.points}</TableCell>
+          <TableCell>~{data.token}PNK</TableCell>
         </TableCellWrapper>
       </TableContainer>
     </Container>
