@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import QR from "@/assets/qr.svg";
+import crypto, { BinaryLike, CipherKey } from "crypto";
+import QRCode from "qrcode";
 import LightLinkButton from "@/components/LightLinkButton";
+import useAuthentication from "@/hooks/useAuthentication";
+import QrReader from "./QrReader";
 
 const Container = styled.div`
   display: flex;
@@ -18,8 +21,17 @@ const ScannerContainer = styled.div`
   gap: 16px;
 `;
 
-const StyledQR = styled(QR)`
+const StyledQR = styled.img`
+  width: 100%;
+  height: 100%;
+  max-width: 480px;
+  object-fit: cover;
   align-self: center;
+`;
+
+const StyledLoader = styled.p`
+  padding: 100px 0;
+  font-weight: 200;
 `;
 
 const Heading = styled.h2`
@@ -34,18 +46,95 @@ const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
 
+const generateIV = (): Buffer => {
+  return crypto.randomBytes(16);
+};
+
+const encrypt = (
+  data: string,
+  secretKey: CipherKey,
+  iv: BinaryLike | null
+): string => {
+  const cipher = crypto.createCipheriv("aes-256-cbc", secretKey, iv);
+  let encryptedData = cipher.update(data, "utf-8", "hex");
+  encryptedData += cipher.final("hex");
+  return encryptedData;
+};
+
+const getQRUrl = (qrData: string, secretKey: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const iv = generateIV();
+    const encryptedData = encrypt(qrData, secretKey, iv);
+    QRCode.toDataURL(encryptedData)
+      .then((url) => resolve(url))
+      .catch((err) => reject(err));
+  });
+};
+
 const Home: React.FC = () => {
+  const [qrUrl, setQrUrl] = useState<string>("");
+  const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
+  const { userid } = useAuthentication();
+  const secretKey = process.env.NEXT_PUBLIC_CYPHER_KEY as string;
+
+  useEffect(() => {
+    const refreshQR = async () => {
+      if (!userid || !secretKey) {
+        console.error("User ID or secret key is missing.");
+        return;
+      }
+
+      const timestamp = Date.now().toString();
+      const qrData = JSON.stringify({ userid, timestamp });
+
+      try {
+        const url = await getQRUrl(qrData, secretKey);
+        setQrUrl(url);
+      } catch (error) {
+        console.error("Error generating QR code:", error);
+      }
+    };
+
+    if (userid) {
+      refreshQR();
+      const interval = setInterval(refreshQR, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [userid]);
+
+  const Scanner = () => {
+    return (
+      <ScannerContainer>
+        <StyledText>Scan another player</StyledText>
+        <QrReader />
+      </ScannerContainer>
+    );
+  };
+
   return (
     <Container>
       <Heading>Kleros Schelling Game</Heading>
-      <ScannerContainer>
-        <StyledText>Scan another player</StyledText>
-        <StyledLinkButton url="question/4654v45e454" text="Scan" />
-      </ScannerContainer>
-      <ScannerContainer>
-        <StyledText>My QR</StyledText>
-        <StyledQR />
-      </ScannerContainer>
+      {isScannerOpen ? (
+        <Scanner />
+      ) : (
+        <>
+          <ScannerContainer>
+            <StyledText>Scan another player</StyledText>
+            <StyledLinkButton
+              onClick={() => setIsScannerOpen(true)}
+              text="Scan"
+            />
+          </ScannerContainer>
+          <ScannerContainer>
+            <StyledText>My QR</StyledText>
+            {qrUrl ? (
+              <StyledQR src={qrUrl} alt="My QR Code" />
+            ) : (
+              <StyledLoader>Loading QR...</StyledLoader>
+            )}
+          </ScannerContainer>
+        </>
+      )}
     </Container>
   );
 };
