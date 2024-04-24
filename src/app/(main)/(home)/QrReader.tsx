@@ -12,8 +12,8 @@ const Container = styled.div`
 
 const ReaderWrapper = styled.div`
   position: relative;
-  width: 100%; /* Set your desired width */
-  height: 100%; /* Set your desired height */
+  width: 100%;
+  height: 100%;
 `;
 
 const ViewFinder = styled.div`

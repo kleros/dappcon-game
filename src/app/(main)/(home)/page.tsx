@@ -61,14 +61,10 @@ const encrypt = (
   return encryptedData;
 };
 
-const getQRUrl = (qrData: string, secretKey: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const iv = generateIV();
-    const encryptedData = encrypt(qrData, secretKey, iv);
-    QRCode.toDataURL(encryptedData)
-      .then((url) => resolve(url))
-      .catch((err) => reject(err));
-  });
+const getQRUrl = async (qrData: string, secretKey: string): Promise<string> => {
+  const iv = generateIV();
+  const encryptedData = encrypt(qrData, secretKey, iv);
+  return QRCode.toDataURL(encryptedData);
 };
 
 const Home: React.FC = () => {
@@ -102,7 +98,7 @@ const Home: React.FC = () => {
     }
   }, [userid]);
 
-  const Scanner = () => {
+  const Scanner: React.FC = () => {
     return (
       <ScannerContainer>
         <StyledText>Scan another player</StyledText>
