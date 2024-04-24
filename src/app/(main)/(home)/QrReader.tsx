@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { QrReader as QRReader, QrReaderProps } from "react-qr-reader";
 import { darkTheme } from "@kleros/ui-components-library";
@@ -46,11 +46,14 @@ const Reader = styled(QRReader)`
 `;
 
 const QrReader: React.FC = () => {
+  const [isScanning, setIsScanning] = useState<boolean>(true);
+
   const OnResultFunction = (result: any) => {
     if (result) {
       const isValid = /[0-9a-fA-F]{64}/.test(result.text);
       if (isValid) {
         window.location.href = `/question/${result?.text}`;
+        setIsScanning(false);
       }
     }
   };
@@ -62,11 +65,15 @@ const QrReader: React.FC = () => {
 
   return (
     <Container>
-      <ReaderWrapper>
-        <ViewFinder />
-        <Reader {...readerProps} />
-        <ScannerOverlay />
-      </ReaderWrapper>
+      {isScanning ? (
+        <ReaderWrapper>
+          <ViewFinder />
+          <Reader {...readerProps} />
+          <ScannerOverlay />
+        </ReaderWrapper>
+      ) : (
+        <>Redirecting, Please Wait.....</>
+      )}
     </Container>
   );
 };
