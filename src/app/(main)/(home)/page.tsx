@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import crypto, { BinaryLike, CipherKey } from "crypto";
 import QRCode from "qrcode";
 import LightLinkButton from "@/components/LightLinkButton";
 import useAuthentication from "@/hooks/useAuthentication";
+import { encrypt } from "@/lib/crypto";
 import QrReader from "./QrReader";
 
 const Container = styled.div`
@@ -46,24 +46,8 @@ const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
 
-const generateIV = (): Buffer => {
-  return crypto.randomBytes(16);
-};
-
-const encrypt = (
-  data: string,
-  secretKey: CipherKey,
-  iv: BinaryLike | null
-): string => {
-  const cipher = crypto.createCipheriv("aes-256-cbc", secretKey, iv);
-  let encryptedData = cipher.update(data, "utf-8", "hex");
-  encryptedData += cipher.final("hex");
-  return encryptedData;
-};
-
-const getQRUrl = async (qrData: string, secretKey: string): Promise<string> => {
-  const iv = generateIV();
-  const encryptedData = encrypt(qrData, secretKey, iv);
+const getQRUrl = async (qrData: string): Promise<string> => {
+  const encryptedData = await encrypt(qrData);
   return QRCode.toDataURL(encryptedData);
 };
 
@@ -71,20 +55,14 @@ const Home: React.FC = () => {
   const [qrUrl, setQrUrl] = useState<string>("");
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
   const { userid } = useAuthentication();
-  const secretKey = process.env.NEXT_PUBLIC_CYPHER_KEY as string;
 
   useEffect(() => {
     const refreshQR = async () => {
-      if (!userid || !secretKey) {
-        console.error("User ID or secret key is missing.");
-        return;
-      }
-
       const timestamp = Date.now().toString();
       const qrData = JSON.stringify({ userid, timestamp });
 
       try {
-        const url = await getQRUrl(qrData, secretKey);
+        const url = await getQRUrl(qrData);
         setQrUrl(url);
       } catch (error) {
         console.error("Error generating QR code:", error);
