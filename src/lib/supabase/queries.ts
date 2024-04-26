@@ -40,3 +40,28 @@ export const getConnections = async (username: string) => {
     .single();
   return { data, error };
 };
+
+export const getLeaderboard = async () => {
+  const { data, error } = await supabase
+    .from("leaderboard")
+    .select()
+    .order("points", { ascending: false })
+    .limit(10);
+  return { data, error };
+};
+
+export const getUserStats = async (user_id: string) => {
+  const { data, error } = await supabase.rpc("get_user_stats", {
+    user_id_params: user_id,
+  });
+
+  return { data, error };
+};
+
+export const claimRewards = async (user_id: string, address: string) => {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ address })
+    .eq("user_id", user_id);
+  return { data, error };
+};

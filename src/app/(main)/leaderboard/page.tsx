@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import RewardsIcon from "@/assets/rewards-dark.svg";
 import LightLinkButton from "@/components/LightLinkButton";
-import { leaderboardData, userData } from "@/consts/dummy-data";
 import Table from "./Table";
 import UserPoints from "./UserPoints";
 
@@ -29,8 +28,8 @@ const Leaderboard: React.FC = () => {
   return (
     <Container>
       <Heading>Leaderboard</Heading>
-      <Table LeaderboardData={leaderboardData} />
-      <UserPoints {...userData} />
+      <Table />
+      <UserPoints />
       <StyledLinkButton
         url="/leaderboard/claim"
         Icon={RewardsIcon}
