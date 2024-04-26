@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import UserIcon from "@/assets/user.svg";
 import ConnectionsIcon from "@/assets/connections.svg";
@@ -54,32 +55,37 @@ const StyledItems = styled.div`
   gap: 16px;
 `;
 
-export interface ISettings {
-  toggleIsSettingsOpen: () => void;
-}
-
-export interface IHelp {
-  toggleIsHelpOpen: () => void;
-}
-
-export interface IDappList {
-  toggleIsDappListOpen: () => void;
+interface UserItem {
+  username: string;
+  connections: number;
+  points: number;
+  token: number;
+  rank: number;
 }
 
 const NavBar: React.FC = () => {
   const { isOpen } = useOpenContext();
+  const { data } = useQuery<UserItem>({
+    queryKey: ["userstats"],
+    queryFn: () => fetch("/api/userstats").then((res) => res.json()),
+  });
+
   return (
     <>
       <Wrapper {...{ isOpen }}>
         <StyledOverlay />
         <Container {...{ isOpen }}>
-          <StyledItems>
-            <UserIcon /> Vaitalik.eth
-          </StyledItems>
-          <StyledItems>
-            <ConnectionsIcon /> 21 Connections
-          </StyledItems>
-          <StyledDivider />
+          {data && (
+            <>
+              <StyledItems>
+                <UserIcon /> {data.username}
+              </StyledItems>
+              <StyledItems>
+                <ConnectionsIcon /> {data.connections} Connections
+              </StyledItems>
+              <StyledDivider />
+            </>
+          )}
           <Explore />
         </Container>
       </Wrapper>
