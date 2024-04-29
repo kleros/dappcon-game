@@ -34,6 +34,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      answers: {
+        Row: {
+          choice: number
+          player_id: string
+          question_id: string
+        }
+        Insert: {
+          choice: number
+          player_id: string
+          question_id: string
+        }
+        Update: {
+          choice?: number
+          player_id?: string
+          question_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_answers_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "public_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leaderboard: {
         Row: {
           connections: number
@@ -60,6 +93,35 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["username"]
+          },
+        ]
+      }
+      questions: {
+        Row: {
+          answers: string[]
+          id: string
+          player_id: string | null
+          question: string
+        }
+        Insert: {
+          answers: string[]
+          id?: string
+          player_id?: string | null
+          question: string
+        }
+        Update: {
+          answers?: string[]
+          id?: string
+          player_id?: string | null
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_questions_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["user_id"]
           },
         ]
       }
