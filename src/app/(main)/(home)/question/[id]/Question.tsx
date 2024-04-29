@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme, Radio } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
-import { question } from "@/consts/dummy-data";
+import { Database } from "@/types/supabase";
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +51,8 @@ interface QuestionProps {
 }
 
 const Question: React.FC<QuestionProps> = ({ setConnected }) => {
+  const { id } = useParams<{ id: string }>();
+
   const [radioValue, setRadioValue] = useState<string | null>(null);
 
   const changeRadioValue: React.ChangeEventHandler<HTMLInputElement> = (
@@ -59,12 +63,37 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
     if (radioValue !== null) setConnected(true);
   };
 
+  type Question = Database["public"]["Tables"]["questions"]["Row"];
+
+  const {
+    isPending,
+    error,
+    data: question,
+  } = useQuery<Question>({
+    queryKey: ["question"],
+    queryFn: () => fetch(`/api/question?id=${id}`).then((res) => res.json()),
+  });
+
+  if (isPending)
+    return (
+      <Container>
+        <StyledText>Please wait ...</StyledText>
+      </Container>
+    );
+
+  if (error)
+    return (
+      <Container>
+        <StyledText>{error.message}</StyledText>
+      </Container>
+    );
+
   return (
     <Container>
       <StyledText>Schelling Question</StyledText>
-      <StyledQuestion>{question.question}</StyledQuestion>
+      <StyledQuestion>{question?.question}</StyledQuestion>
       <Options>
-        {question.options.map((option) => (
+        {question?.answers.map((option) => (
           <StyledRadio
             key={option}
             label={option}
