@@ -12,7 +12,7 @@ export const encrypt = (data: string): string => {
   const cipher = crypto.createCipheriv("aes-256-cbc", secretKey, iv);
   let encryptedData = cipher.update(data, "utf-8", "hex");
   encryptedData += cipher.final("hex");
-  return encryptedData;
+  return `${iv.toString("hex")}:${encryptedData}`;
 };
 
 // TODO: decrypt function
