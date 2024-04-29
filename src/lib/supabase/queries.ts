@@ -65,3 +65,22 @@ export const claimRewards = async (user_id: string, address: string) => {
     .eq("user_id", user_id);
   return { data, error };
 };
+
+export const getQuestion = async (user_id: string) => {
+  const { data, error } = await supabase
+    .from("questions")
+    .select()
+    .eq("player_id", user_id);
+  return { data, error };
+};
+
+export const addAnswer = async (
+  question_id: string,
+  player_id: string,
+  choice: number
+) => {
+  const { data, error } = await supabase
+    .from("answers")
+    .insert([{ question_id, player_id, choice }]);
+  return { data, error };
+};
