@@ -2,6 +2,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { decrypt } from "@/lib/crypto";
 import { getQuestion } from "@/lib/supabase/queries";
 
+const ONE_MINUTE = 1 * 60 * 1000;
+
 const verifyToken = (token: string): JwtPayload | undefined => {
   try {
     return jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
@@ -38,9 +40,8 @@ export const GET = async (request: Request) => {
 
   const currentTime = new Date().getTime();
   const time = parseInt(decryptedData.timestamp);
-  const validTime = 1 * 60 * 1000; // 1 minute in milliseconds
 
-  if (isNaN(time) || currentTime > time || currentTime - time > validTime) {
+  if (isNaN(time) || currentTime > time || currentTime - time > ONE_MINUTE) {
     return new Response("Timeout", { status: 408 });
   }
 
