@@ -35,20 +35,26 @@ export const GET = async (request: Request) => {
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
-    return new Response("Invalid token", { status: 400 });
+    return new Response("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
   const currentTime = new Date().getTime();
-  const time = parseInt(decryptedData.timestamp);
+  const tokenTime = parseInt(decryptedData.timestamp);
 
-  if (isNaN(time) || currentTime > time || currentTime - time > ONE_MINUTE) {
-    return new Response("Timeout", { status: 408 });
+  if (
+    isNaN(tokenTime) ||
+    currentTime > tokenTime ||
+    currentTime - tokenTime > ONE_MINUTE
+  ) {
+    return new Response("QR expired, re-scan new QR", { status: 408 });
   }
 
   const { data, error } = await getQuestion(decryptedData.userid);
   if (error) {
     console.error("Error fetching question:", error);
-    return new Response("Error occurred", { status: 500 });
+    return new Response("Error occurred while fetching question", {
+      status: 500,
+    });
   }
 
   if (data && data.length > 0) {

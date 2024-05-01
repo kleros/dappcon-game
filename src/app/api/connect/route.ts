@@ -40,7 +40,7 @@ export const POST = async (request: Request) => {
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
-    return new Response("Invalid token", { status: 400 });
+    return new Response("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
   const currentTime = new Date().getTime();
@@ -51,7 +51,7 @@ export const POST = async (request: Request) => {
     currentTime > tokenTime ||
     currentTime - tokenTime > ONE_MINUTE_THIRTY_SECONDS
   ) {
-    return new Response("Timeout", { status: 408 });
+    return new Response("Question expired, re-scan new QR", { status: 408 });
   }
 
   const isAlreadyAnswered = await checkAlreadyAnswered(

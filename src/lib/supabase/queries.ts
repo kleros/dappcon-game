@@ -73,11 +73,11 @@ export const claimRewards = async (user_id: string, address: string) => {
   return { data, error };
 };
 
-export const getQuestion = async (user_id: string) => {
+export const getQuestion = async (player_id: string) => {
   const { data, error } = await supabase
     .from("questions")
     .select()
-    .eq("player_id", user_id);
+    .eq("player_id", player_id);
   return { data, error };
 };
 

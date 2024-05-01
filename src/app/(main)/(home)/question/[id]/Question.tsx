@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { darkTheme, Radio } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import { Database } from "@/types/supabase";
+import { toast } from "react-toastify";
+import { useQuestion } from "@/hooks/useQuestion";
 
 const Container = styled.div`
   display: flex;
@@ -52,6 +54,7 @@ interface QuestionProps {
 
 const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const { id } = useParams<{ id: string }>();
+  const { isPending, error, question, submitAnswer } = useQuestion(id);
 
   const [radioValue, setRadioValue] = useState<string | null>(null);
 
@@ -59,20 +62,18 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
     event
   ) => setRadioValue(event.target.value);
 
-  const handleAnswer = () => {
-    if (radioValue !== null) setConnected(true);
+  const handleAnswer = async () => {
+    if (radioValue !== null) {
+      try {
+        await submitAnswer(question?.id!, radioValue);
+        setConnected(true);
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    } else {
+      toast.error("Please select an option");
+    }
   };
-
-  type Question = Database["public"]["Tables"]["questions"]["Row"];
-
-  const {
-    isPending,
-    error,
-    data: question,
-  } = useQuery<Question>({
-    queryKey: ["question"],
-    queryFn: () => fetch(`/api/question?id=${id}`).then((res) => res.json()),
-  });
 
   if (isPending)
     return (
@@ -81,24 +82,25 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
       </Container>
     );
 
-  if (error)
+  if (error) {
     return (
       <Container>
         <StyledText>{error.message}</StyledText>
       </Container>
     );
+  }
 
   return (
     <Container>
       <StyledText>Schelling Question</StyledText>
       <StyledQuestion>{question?.question}</StyledQuestion>
       <Options>
-        {question?.answers.map((option) => (
+        {question?.answers?.map((option, index) => (
           <StyledRadio
             key={option}
             label={option}
-            value={option}
-            checked={radioValue === option}
+            value={index.toString()}
+            checked={radioValue === index.toString()}
             onChange={changeRadioValue}
           />
         ))}
