@@ -1,38 +1,75 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { decrypt } from "@/lib/crypto";
-import { addAnswer } from "@/lib/supabase/queries";
+import {
+  addAnswer,
+  checkAlreadyAnswered,
+  updateConnectionCount,
+} from "@/lib/supabase/queries";
+
+const ONE_MINUTE_THIRTY_SECONDS = 1.5 * 60 * 1000; // Giving 30 seconds extra to answer
+
+const verifyToken = (token: string): JwtPayload | undefined => {
+  try {
+    return jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
+  } catch (error) {
+    console.error("JWT verification failed:", error);
+    return undefined;
+  }
+};
+
+const decryptData = async (
+  id: string
+): Promise<{ userid: string; timestamp: string } | undefined> => {
+  try {
+    return JSON.parse(await decrypt(id));
+  } catch (error) {
+    console.error("Token decryption failed:", error);
+    return undefined;
+  }
+};
 
 export const POST = async (request: Request) => {
   const { id, question_id, choice } = await request.json();
 
   const token = request.headers.get("Cookie")?.replace("token=", "");
-  let user_id: string | null = null;
 
-  try {
-    const payload = jwt.verify(
-      token as string,
-      process.env.SECRET_KEY!
-    ) as JwtPayload;
-    user_id = payload.user_id;
-  } catch (error) {
-    return new Response("User is not authenticated!", {
-      status: 403,
-    });
+  const tokenPayload = verifyToken(token as string);
+  if (!tokenPayload) {
+    return new Response("User is not authenticated!", { status: 401 });
   }
 
-  //TODO:
-  // 1. decrypt id and get time
-  //if time is not vaid, timeout
+  const decryptedData = await decryptData(id!);
+  if (!decryptedData) {
+    return new Response("Invalid token", { status: 400 });
+  }
 
-  //check if already answered (already connected)
+  const currentTime = new Date().getTime();
+  const time = parseInt(decryptedData.timestamp);
 
+  if (
+    isNaN(time) ||
+    currentTime > time ||
+    currentTime - time > ONE_MINUTE_THIRTY_SECONDS
+  ) {
+    return new Response("Timeout", { status: 408 });
+  }
 
-  const { error } = await addAnswer(question_id, user_id!, choice);
+  const answer = await checkAlreadyAnswered(question_id, tokenPayload.user_id!);
+  if (answer) {
+    return new Response("Already answered", { status: 400 });
+  }
+
+  const { error } = await addAnswer(question_id, tokenPayload.user_id!, choice);
   if (error) {
-    return new Response("Error occured", { status: 404 });
+    return new Response("Failed to save your response", { status: 500 });
   }
 
-    // connection ++
+  const { error: connectionError } = await updateConnectionCount(
+    tokenPayload.user_id!
+  );
+  if (connectionError) {
+    return new Response("Failed to update your connection", { status: 500 });
+  }
 
-  return new Response("Connected Successfully");
+  return new Response("Connected successfully");
 };

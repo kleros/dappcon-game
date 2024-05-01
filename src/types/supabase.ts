@@ -160,6 +160,12 @@ export type Database = {
           rank: number
         }[]
       }
+      update_connection_count: {
+        Args: {
+          p_user_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
