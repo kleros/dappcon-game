@@ -44,23 +44,30 @@ export const POST = async (request: Request) => {
   }
 
   const currentTime = new Date().getTime();
-  const time = parseInt(decryptedData.timestamp);
+  const tokenTime = parseInt(decryptedData.timestamp);
 
   if (
-    isNaN(time) ||
-    currentTime > time ||
-    currentTime - time > ONE_MINUTE_THIRTY_SECONDS
+    isNaN(tokenTime) ||
+    currentTime > tokenTime ||
+    currentTime - tokenTime > ONE_MINUTE_THIRTY_SECONDS
   ) {
     return new Response("Timeout", { status: 408 });
   }
 
-  const answer = await checkAlreadyAnswered(question_id, tokenPayload.user_id!);
-  if (answer) {
+  const isAlreadyAnswered = await checkAlreadyAnswered(
+    question_id,
+    tokenPayload.user_id!
+  );
+  if (isAlreadyAnswered) {
     return new Response("Already answered", { status: 400 });
   }
 
-  const { error } = await addAnswer(question_id, tokenPayload.user_id!, choice);
-  if (error) {
+  const { error: addAnswerError } = await addAnswer(
+    question_id,
+    tokenPayload.user_id!,
+    choice
+  );
+  if (addAnswerError) {
     return new Response("Failed to save your response", { status: 500 });
   }
 
