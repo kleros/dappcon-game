@@ -7,6 +7,8 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { encrypt } from "@/lib/crypto";
 import QrReader from "./QrReader";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -48,7 +50,7 @@ const StyledLinkButton = styled(LightLinkButton)`
 
 const getQRUrl = async (qrData: string): Promise<string> => {
   const encryptedData = await encrypt(qrData);
-  return QRCode.toDataURL(encryptedData);
+  return QRCode.toDataURL(BASE_URL + "/question/" + encryptedData);
 };
 
 const Home: React.FC = () => {
