@@ -42,7 +42,7 @@ AS $function$
 DECLARE
     question_id uuid;
 BEGIN
-    -- Find an unanswered question
+    -- Find an unassigned question
     SELECT id INTO question_id
     FROM questions 
     WHERE player_id IS NULL
