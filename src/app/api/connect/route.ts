@@ -43,6 +43,12 @@ export const POST = async (request: Request) => {
     return new Response("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
+  if (decryptedData.userid === tokenPayload.user_id) {
+    return new Response("Oops, you cannot connect with yourself.", {
+      status: 400,
+    });
+  }
+
   const currentTime = new Date().getTime();
   const tokenTime = parseInt(decryptedData.timestamp);
 
@@ -56,7 +62,7 @@ export const POST = async (request: Request) => {
 
   const isAlreadyAnswered = await checkAlreadyAnswered(
     question_id,
-    tokenPayload.user_id!
+    tokenPayload.user_id
   );
   if (isAlreadyAnswered) {
     return new Response("Already answered", { status: 400 });
@@ -64,7 +70,7 @@ export const POST = async (request: Request) => {
 
   const { error: addAnswerError } = await addAnswer(
     question_id,
-    tokenPayload.user_id!,
+    tokenPayload.user_id,
     choice
   );
   if (addAnswerError) {
@@ -72,7 +78,7 @@ export const POST = async (request: Request) => {
   }
 
   const { error: connectionError } = await updateConnectionCount(
-    tokenPayload.user_id!
+    tokenPayload.user_id
   );
   if (connectionError) {
     return new Response("Failed to update your connection", { status: 500 });

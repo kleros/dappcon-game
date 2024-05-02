@@ -55,6 +55,7 @@ interface QuestionProps {
 const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const { id } = useParams<{ id: string }>();
   const { isPending, error, question, submitAnswer } = useQuestion(id);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [radioValue, setRadioValue] = useState<string | null>(null);
 
@@ -65,9 +66,12 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const handleAnswer = async () => {
     if (radioValue !== null) {
       try {
+        setLoading(true);
         await submitAnswer(question?.id!, radioValue);
+        setLoading(false);
         setConnected(true);
       } catch (error: any) {
+        setLoading(false);
         toast.error(error.message);
       }
     } else {
@@ -105,7 +109,11 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
           />
         ))}
       </Options>
-      <StyledLinkButton text="Answer" onClick={handleAnswer} />
+      <StyledLinkButton
+        disabled={loading}
+        text={loading ? "Connecting..." : "Answer"}
+        onClick={handleAnswer}
+      />
     </Container>
   );
 };

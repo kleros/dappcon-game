@@ -38,6 +38,12 @@ export const GET = async (request: Request) => {
     return new Response("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
+  if (decryptedData.userid === tokenPayload.user_id) {
+    return new Response("Oops, You can't connect with yourself", {
+      status: 400,
+    });
+  }
+
   const currentTime = new Date().getTime();
   const tokenTime = parseInt(decryptedData.timestamp);
 
