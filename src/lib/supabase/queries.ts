@@ -41,6 +41,13 @@ export const getConnections = async (username: string) => {
   return { data, error };
 };
 
+export const updateConnectionCount = async (user_id: UUID) => {
+  const { data, error } = await supabase.rpc("update_connection_count", {
+    p_user_id: user_id,
+  });
+  return { data, error };
+};
+
 export const getLeaderboard = async () => {
   const { data, error } = await supabase
     .from("leaderboard")
@@ -64,4 +71,40 @@ export const claimRewards = async (user_id: string, address: string) => {
     .update({ address })
     .eq("user_id", user_id);
   return { data, error };
+};
+
+export const getQuestion = async (player_id: string) => {
+  const { data, error } = await supabase
+    .from("questions")
+    .select()
+    .eq("player_id", player_id);
+  return { data, error };
+};
+
+export const addAnswer = async (
+  question_id: string,
+  player_id: string,
+  choice: number
+) => {
+  const { data, error } = await supabase
+    .from("answers")
+    .insert([{ question_id, player_id, choice }]);
+  return { data, error };
+};
+
+export const checkAlreadyAnswered = async (
+  question_id: string,
+  player_id: string
+) => {
+  const { data } = await supabase
+    .from("answers")
+    .select()
+    .eq("question_id", question_id)
+    .eq("player_id", player_id)
+    .single();
+  if (data) {
+    return true;
+  } else {
+    return false;
+  }
 };

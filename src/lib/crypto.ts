@@ -15,4 +15,11 @@ export const encrypt = (data: string): string => {
   return `${iv.toString("hex")}:${encryptedData}`;
 };
 
-// TODO: decrypt function
+export const decrypt = (encryptedData: string) => {
+  const components = encryptedData.split(":");
+  const iv = Buffer.from(components[0], "hex");
+  const decipher = crypto.createDecipheriv("aes-256-cbc", secretKey, iv);
+  let decryptedData = decipher.update(components[1], "hex", "utf8");
+  decryptedData += decipher.final("utf8");
+  return decryptedData;
+};
