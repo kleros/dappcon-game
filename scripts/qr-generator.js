@@ -12,7 +12,7 @@ if (!fs.existsSync(outputDirectory)) {
 }
 
 const SECRET_KEY = process.env.SECRET_KEY;
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!SECRET_KEY || !BASE_URL) {
   console.error("Please provide a SECRET_KEY & BASE_URL in the .env file.");

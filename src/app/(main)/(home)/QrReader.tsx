@@ -52,7 +52,7 @@ const QrReader: React.FC = () => {
     if (result) {
       const isValid = /[0-9a-fA-F]{64}/.test(result.text);
       if (isValid) {
-        window.location.href = `/question/${result?.text}`;
+        window.location.href = result?.text;
         setIsScanning(false);
       }
     }
