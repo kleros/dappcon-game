@@ -17,7 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function uploadData() {
   try {
     const results = [];
-    fs.createReadStream("questions.csv")
+    fs.createReadStream(path.resolve(__dirname, "questions.csv"))
       .pipe(csv())
       .on("data", (data) => results.push(data))
       .on("end", async () => {
