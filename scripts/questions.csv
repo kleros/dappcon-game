@@ -1,0 +1,11 @@
+question,option_1,option_2,option_3,option_4
+What is Web3?,A new version of the internet,A programming language,A cryptocurrency,A decentralized web platform
+Which blockchain is commonly associated with Web3 development?,Ethereum,Bitcoin,Polkadot,Tezos
+What is the purpose of a smart contract in Web3?,Automate and enforce agreements,Secure web browsing,Decentralized identity management,Optimize database queries
+What is the primary benefit of decentralization in Web3?,Increased security,Lower transaction fees,Enhanced scalability,Reduced complexity
+What technology is used for Web3 identity management?,Decentralized identifiers (DIDs),Biometrics,OAuth,Two-factor authentication (2FA)
+What is a dApp in the context of Web3?,A decentralized application,A digital asset,A distributed ledger,A data visualization tool
+Which protocol is commonly used for peer-to-peer communication in Web3?,IPFS (InterPlanetary File System),HTTP (Hypertext Transfer Protocol),TCP (Transmission Control Protocol),UDP (User Datagram Protocol)
+What is the role of nodes in a Web3 network?,To validate and propagate transactions,To store user data,To execute smart contracts,To manage user identities
+What consensus mechanism is used by Ethereum in its transition to Ethereum 2.0?,Proof of Stake (PoS),Proof of Work (PoW),Delegated Proof of Stake (DPoS),Proof of Authority (PoA)
+What is the purpose of gas fees in Web3?,To incentivize miners,To secure the network,To prevent spam transactions,To fund blockchain development
