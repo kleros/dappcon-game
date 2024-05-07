@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { UUID } from "crypto";
-import { USER_ID_HEADER } from "@/middleware";
+import { getUserId, TOKEN_COOKIE } from "@/middleware";
 import { decrypt } from "@/lib/crypto";
 import { getQuestion } from "@/lib/supabase/queries";
 
@@ -19,7 +18,8 @@ const decryptData = async (
 
 export const GET = async (request: NextRequest) => {
   const id = new URL(request.url).searchParams.get("id");
-  const userId = request.headers.get(USER_ID_HEADER) as UUID;
+  const token = request.cookies.get(TOKEN_COOKIE)?.value;
+  const userId = getUserId(token);
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
