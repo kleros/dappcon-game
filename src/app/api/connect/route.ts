@@ -1,3 +1,4 @@
+import { type NextRequest, NextResponse } from "next/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { decrypt } from "@/lib/crypto";
 import {
@@ -28,23 +29,23 @@ const decryptData = async (
   }
 };
 
-export const POST = async (request: Request) => {
+export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
 
-  const token = request.headers.get("Cookie")?.replace("token=", "");
+  const token = request.cookies.get("token");
 
-  const tokenPayload = verifyToken(token as string);
+  const tokenPayload = verifyToken(token?.value!);
   if (!tokenPayload) {
-    return new Response("User is not authenticated!", { status: 401 });
+    return new NextResponse("User is not authenticated!", { status: 401 });
   }
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
-    return new Response("Invalid player QR, re-scan new QR", { status: 400 });
+    return new NextResponse("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
   if (decryptedData.userid === tokenPayload.user_id) {
-    return new Response("Oops, you cannot connect with yourself.", {
+    return new NextResponse("Oops, you cannot connect with yourself.", {
       status: 400,
     });
   }
@@ -54,7 +55,7 @@ export const POST = async (request: Request) => {
 
   if (
     isNaN(tokenTime) ||
-    currentTime > tokenTime ||
+    currentTime < tokenTime ||
     currentTime - tokenTime > ONE_MINUTE_THIRTY_SECONDS
   ) {
     return new Response("Question expired, re-scan new QR", { status: 408 });
@@ -65,7 +66,7 @@ export const POST = async (request: Request) => {
     tokenPayload.user_id
   );
   if (isAlreadyAnswered) {
-    return new Response("Already answered", { status: 400 });
+    return new NextResponse("Already answered", { status: 400 });
   }
 
   const { error: addAnswerError } = await addAnswer(
@@ -74,15 +75,15 @@ export const POST = async (request: Request) => {
     choice
   );
   if (addAnswerError) {
-    return new Response("Failed to save your response", { status: 500 });
+    return new NextResponse("Failed to save your response", { status: 500 });
   }
 
   const { error: connectionError } = await updateConnectionCount(
     tokenPayload.user_id
   );
   if (connectionError) {
-    return new Response("Failed to update your connection", { status: 500 });
+    return new NextResponse("Failed to update your connection", { status: 500 });
   }
 
-  return new Response("Connected successfully");
+  return new NextResponse("Connected successfully");
 };
