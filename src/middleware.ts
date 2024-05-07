@@ -48,6 +48,6 @@ export const config = {
     "/question/:id*",
     "/leaderboard",
     "/leaderboard/claim",
-    "/api/*",
+    "/api/(.+)",
   ],
 };
