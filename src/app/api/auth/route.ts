@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { UUID } from "crypto";
-import { USER_ID_HEADER } from "@/middleware";
+import { getUserId } from "@/middleware";
 import {
   checkUserExists,
   getUser,
@@ -17,7 +17,11 @@ interface ResponseBody {
 
 export const POST = async (request: NextRequest) => {
   const { token, username } = await request.json();
-  const userId = request.headers.get(USER_ID_HEADER) as UUID;
+  const userId = getUserId(token);
+
+  if (!userId) {
+    return new NextResponse("User is not authenticated!", { status: 403 });
+  }
 
   if (await checkUserExists(userId)) {
     const user = await getUser(userId);
