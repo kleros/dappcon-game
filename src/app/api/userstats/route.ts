@@ -1,23 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { UUID } from "crypto";
+import { USER_ID_HEADER } from "@/middleware";
 import { getUserStats } from "@/lib/supabase/queries";
 
 export const GET = async (request: NextRequest) => {
-  const token = request.cookies.get("token");
-  let user_id: string | null = null;
-
-  try {
-    const payload = jwt.verify(
-      token?.value!,
-      process.env.SECRET_KEY!
-    ) as JwtPayload;
-    user_id = payload.user_id;
-  } catch (error) {
-    return new NextResponse("User is not authenticated!", {
-      status: 403,
-    });
-  }
-  const { data, error } = await getUserStats(user_id!);
+  const userId = request.headers.get(USER_ID_HEADER) as UUID;
+  const { data, error } = await getUserStats(userId);
   if (error) {
     return new NextResponse(String(error), { status: 404 });
   }

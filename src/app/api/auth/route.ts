@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { UUID } from "crypto";
+import { USER_ID_HEADER } from "@/middleware";
 import {
   checkUserExists,
   getUser,
@@ -17,18 +17,10 @@ interface ResponseBody {
 
 export const POST = async (request: NextRequest) => {
   const { token, username } = await request.json();
-  let user_id: UUID | null = null;
-  try {
-    const payload = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-    user_id = payload.user_id;
-  } catch (error) {
-    return new NextResponse("Invalid token, Scan the QR correctly", {
-      status: 403,
-    });
-  }
+  const userId = request.headers.get(USER_ID_HEADER) as UUID;
 
-  if (await checkUserExists(user_id!)) {
-    const user = await getUser(user_id!);
+  if (await checkUserExists(userId)) {
+    const user = await getUser(userId);
     if (user.error) {
       return new NextResponse(user.error.details, { status: 500 });
     }
@@ -38,7 +30,7 @@ export const POST = async (request: NextRequest) => {
       });
     }
   } else {
-    const user = await setUser(user_id!, username);
+    const user = await setUser(userId, username);
     if (user.error) {
       return new NextResponse(user.error.details, { status: 500 });
     }
@@ -47,7 +39,7 @@ export const POST = async (request: NextRequest) => {
   const connections = (await getConnections(username)).data?.connections || 0;
 
   const responseBody: ResponseBody = {
-    user_id: user_id!,
+    user_id: userId,
     username,
     connections,
     token,

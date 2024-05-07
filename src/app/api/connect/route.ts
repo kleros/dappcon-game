@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { UUID } from "crypto";
+import { USER_ID_HEADER } from "@/middleware";
 import { decrypt } from "@/lib/crypto";
 import {
   addAnswer,
@@ -8,15 +9,6 @@ import {
 } from "@/lib/supabase/queries";
 
 const ONE_MINUTE_THIRTY_SECONDS = 1.5 * 60 * 1000; // Giving 30 seconds extra to answer
-
-const verifyToken = (token: string): JwtPayload | undefined => {
-  try {
-    return jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-  } catch (error) {
-    console.error("JWT verification failed:", error);
-    return undefined;
-  }
-};
 
 const decryptData = async (
   id: string
@@ -31,20 +23,14 @@ const decryptData = async (
 
 export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
-
-  const token = request.cookies.get("token");
-
-  const tokenPayload = verifyToken(token?.value!);
-  if (!tokenPayload) {
-    return new NextResponse("User is not authenticated!", { status: 401 });
-  }
+  const userId = request.headers.get(USER_ID_HEADER) as UUID;
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
     return new NextResponse("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
-  if (decryptedData.userid === tokenPayload.user_id) {
+  if (decryptedData.userid === userId) {
     return new NextResponse("Oops, you cannot connect with yourself.", {
       status: 400,
     });
@@ -61,26 +47,17 @@ export const POST = async (request: NextRequest) => {
     return new Response("Question expired, re-scan new QR", { status: 408 });
   }
 
-  const isAlreadyAnswered = await checkAlreadyAnswered(
-    question_id,
-    tokenPayload.user_id
-  );
+  const isAlreadyAnswered = await checkAlreadyAnswered(question_id, userId);
   if (isAlreadyAnswered) {
     return new NextResponse("Already answered", { status: 400 });
   }
 
-  const { error: addAnswerError } = await addAnswer(
-    question_id,
-    tokenPayload.user_id,
-    choice
-  );
+  const { error: addAnswerError } = await addAnswer(question_id, userId, choice);
   if (addAnswerError) {
     return new NextResponse("Failed to save your response", { status: 500 });
   }
 
-  const { error: connectionError } = await updateConnectionCount(
-    tokenPayload.user_id
-  );
+  const { error: connectionError } = await updateConnectionCount(userId);
   if (connectionError) {
     return new NextResponse("Failed to update your connection", { status: 500 });
   }

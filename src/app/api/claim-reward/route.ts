@@ -1,32 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { UUID } from "crypto";
 import { isAddress } from "viem";
+import { USER_ID_HEADER } from "@/middleware";
 import { checkUserExists, claimRewards } from "@/lib/supabase/queries";
 
 export const POST = async (request: NextRequest) => {
   const { address } = await request.json();
-  const token = request.cookies.get("token");
-  let user_id: UUID | null = null;
-
-  try {
-    const payload = jwt.verify(
-      token?.value!,
-      process.env.SECRET_KEY!
-    ) as JwtPayload;
-    user_id = payload.user_id;
-  } catch (error) {
-    return new NextResponse("User is not authenticated!", {
-      status: 403,
-    });
-  }
+  const userId = request.headers.get(USER_ID_HEADER) as UUID;
 
   if (!isAddress(address.toLowerCase())) {
     return new NextResponse("Invalid address", { status: 500 });
   }
 
-  if (await checkUserExists(user_id!)) {
-    const user = await claimRewards(user_id!, address.toLowerCase());
+  if (await checkUserExists(userId)) {
+    const user = await claimRewards(userId, address.toLowerCase());
     if (user.error) {
       return new NextResponse(user.error.details, { status: 500 });
     }
