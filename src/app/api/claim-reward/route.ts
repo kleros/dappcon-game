@@ -1,12 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { isAddress } from "viem";
 import { checkUserExists, claimRewards } from "@/lib/supabase/queries";
-import { getUserId, TOKEN_COOKIE } from "@/middleware";
+import { getUserId, NotAuthenticatedResponse, TOKEN_COOKIE } from "@/lib/auth";
 
 export const POST = async (request: NextRequest) => {
   const { address } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
   const userId = getUserId(token);
+
+  if (!userId) {
+    return NotAuthenticatedResponse;
+  }
 
   if (!isAddress(address.toLowerCase())) {
     return new NextResponse("Invalid address", { status: 500 });

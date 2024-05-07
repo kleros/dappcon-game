@@ -1,21 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { UUID } from "crypto";
+import { TOKEN_COOKIE } from "@/lib/auth";
 
-const JWT_SECRET_KEY = process.env.SECRET_KEY ?? "";
-
-export const USER_ID_HEADER = "x-user-id-dappcon";
-export const TOKEN_COOKIE = "token";
-
-export const getUserId: (arg0?: string) => UUID | false = (token) => {
-  if (typeof(token) === "undefined") return false;
-  try {
-    const payload = jwt.verify(token, JWT_SECRET_KEY) as JwtPayload;
-    return payload.user_id;
-  } catch {
-    return false;
-  }
-}
 
 export const middleware = (request: NextRequest) => {
   const path = request.nextUrl.pathname;

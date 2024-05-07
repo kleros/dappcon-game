@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { UUID } from "crypto";
-import { getUserId } from "@/middleware";
+import { getUserId, NotAuthenticatedResponse } from "@/lib/auth";
 import {
   checkUserExists,
   getUser,
@@ -20,7 +20,7 @@ export const POST = async (request: NextRequest) => {
   const userId = getUserId(token);
 
   if (!userId) {
-    return new NextResponse("User is not authenticated!", { status: 403 });
+    return NotAuthenticatedResponse;
   }
 
   if (await checkUserExists(userId)) {

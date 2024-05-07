@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getUserId, TOKEN_COOKIE } from "@/middleware";
+import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import {
   addAnswer,
@@ -24,6 +24,10 @@ export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
   const userId = getUserId(token);
+
+  if (!userId) {
+    return NotAuthenticatedResponse;
+  }
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {

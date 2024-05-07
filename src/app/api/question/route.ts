@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getUserId, TOKEN_COOKIE } from "@/middleware";
+import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import { getQuestion } from "@/lib/supabase/queries";
 
@@ -20,6 +20,10 @@ export const GET = async (request: NextRequest) => {
   const id = new URL(request.url).searchParams.get("id");
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
   const userId = getUserId(token);
+
+  if (!userId) {
+    return NotAuthenticatedResponse;
+  }
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
