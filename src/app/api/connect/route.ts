@@ -51,24 +51,20 @@ export const POST = async (request: NextRequest) => {
     return new Response("Question expired, re-scan new QR", { status: 408 });
   }
 
-  if (userId) {
-    const isAlreadyAnswered = await checkAlreadyAnswered(question_id, userId);
-    if (isAlreadyAnswered) {
-      return new NextResponse("Already answered", { status: 400 });
-    }
-
-    const { error: addAnswerError } = await addAnswer(question_id, userId, choice);
-    if (addAnswerError) {
-      return new NextResponse("Failed to save your response", { status: 500 });
-    }
-
-    const { error: connectionError } = await updateConnectionCount(userId);
-    if (connectionError) {
-      return new NextResponse("Failed to update your connection", { status: 500 });
-    }
-
-    return new NextResponse("Connected successfully");
+  const isAlreadyAnswered = await checkAlreadyAnswered(question_id, userId);
+  if (isAlreadyAnswered) {
+    return new NextResponse("Already answered", { status: 400 });
   }
 
-  return new NextResponse("User not connected.", { status: 500 });
+  const { error: addAnswerError } = await addAnswer(question_id, userId, choice);
+  if (addAnswerError) {
+    return new NextResponse("Failed to save your response", { status: 500 });
+  }
+
+  const { error: connectionError } = await updateConnectionCount(userId);
+  if (connectionError) {
+    return new NextResponse("Failed to update your connection", { status: 500 });
+  }
+
+  return new NextResponse("Connected successfully");
 };
