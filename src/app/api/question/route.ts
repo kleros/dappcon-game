@@ -1,18 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import { getQuestion } from "@/lib/supabase/queries";
 
 const ONE_MINUTE = 1 * 60 * 1000;
-
-const verifyToken = (token: string): JwtPayload | undefined => {
-  try {
-    return jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-  } catch (error) {
-    console.error("JWT verification failed:", error);
-    return undefined;
-  }
-};
 
 const decryptData = async (
   id: string
@@ -27,11 +18,11 @@ const decryptData = async (
 
 export const GET = async (request: NextRequest) => {
   const id = new URL(request.url).searchParams.get("id");
-  const token = request.cookies.get("token");
+  const token = request.cookies.get(TOKEN_COOKIE)?.value;
+  const userId = getUserId(token);
 
-  const tokenPayload = verifyToken(token?.value!);
-  if (!tokenPayload) {
-    return new NextResponse("User is not authenticated!", { status: 401 });
+  if (!userId) {
+    return NotAuthenticatedResponse;
   }
 
   const decryptedData = await decryptData(id!);
@@ -41,7 +32,7 @@ export const GET = async (request: NextRequest) => {
     });
   }
 
-  if (decryptedData.userid === tokenPayload.user_id) {
+  if (decryptedData.userid === userId) {
     return new NextResponse("Oops, You can't connect with yourself", {
       status: 400,
     });
