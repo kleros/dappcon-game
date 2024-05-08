@@ -55,31 +55,19 @@ const Table: React.FC = () => {
           Est. <RewardsIcon />
         </TableCell>
       </TableCellWrapper>
-      {data?.map(
-        (item: LeaderboardItem, index: number, array: LeaderboardItem[]) => {
-          // Calculate rank by counting previous items with greater connections
-          const rank =
-            array.filter((el) => el.connections > item.connections).length + 1;
-
-          return (
-            <React.Fragment key={index}>
-              <TableCellWrapper rank>
-                <TableCell rank>#{rank}</TableCell>
-                <TableCell>
-                  {item.username.length > 8
-                    ? `${item.username.slice(0, 8)}...`
-                    : item.username}
-                </TableCell>
-              </TableCellWrapper>
-              <TableCellWrapper>
-                <TableCell>{item.connections}</TableCell>
-                <TableCell>{item.points}</TableCell>
-                <TableCell>~{item.token} PNK</TableCell>
-              </TableCellWrapper>
-            </React.Fragment>
-          );
-        }
-      )}
+      {data?.map((item: LeaderboardItem, index: number) => (
+        <React.Fragment key={index}>
+          <TableCellWrapper rank>
+            <TableCell rank>#{index + 1}</TableCell>
+            <TableCell>{item.username.length > 8 ? `${item.username.slice(0, 8)}...` : item.username}</TableCell>
+          </TableCellWrapper>
+          <TableCellWrapper>
+            <TableCell>{item.connections}</TableCell>
+            <TableCell>{item.points}</TableCell>
+            <TableCell>~{item.token} PNK</TableCell>
+          </TableCellWrapper>
+        </React.Fragment>
+      ))}
     </TableContainer>
   );
 };
