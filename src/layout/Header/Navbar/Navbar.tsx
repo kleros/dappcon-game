@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import UserIcon from "@/assets/user.svg";
 import ConnectionsIcon from "@/assets/connections.svg";
-import { Overlay } from "@/components/Overlay";
 import Explore from "@/layout/Header/Navbar/Explore";
 import { useOpenContext } from "./MobileHeader";
 
@@ -14,12 +13,7 @@ const Wrapper = styled.div<{ isOpen: boolean }>`
   top: 100%;
   left: 0;
   width: 100vw;
-  height: 100vh;
   z-index: 30;
-`;
-
-const StyledOverlay = styled(Overlay)`
-  top: unset;
 `;
 
 const Container = styled.div<{ isOpen: boolean }>`
@@ -71,25 +65,22 @@ const NavBar: React.FC = () => {
   });
 
   return (
-    <>
-      <Wrapper {...{ isOpen }}>
-        <StyledOverlay />
-        <Container {...{ isOpen }}>
-          {data && (
-            <>
-              <StyledItems>
-                <UserIcon /> {data.username}
-              </StyledItems>
-              <StyledItems>
-                <ConnectionsIcon /> {data.connections} Connections
-              </StyledItems>
-              <StyledDivider />
-            </>
-          )}
-          <Explore />
-        </Container>
-      </Wrapper>
-    </>
+    <Wrapper {...{ isOpen }}>
+      <Container {...{ isOpen }}>
+        {data && (
+          <>
+            <StyledItems>
+              <UserIcon /> {data.username}
+            </StyledItems>
+            <StyledItems>
+              <ConnectionsIcon /> {data.connections} Connections
+            </StyledItems>
+            <StyledDivider />
+          </>
+        )}
+        <Explore />
+      </Container>
+    </Wrapper>
   );
 };
 
