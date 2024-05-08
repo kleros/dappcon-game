@@ -53,6 +53,7 @@ export const getLeaderboard = async () => {
     .from("leaderboard")
     .select()
     .order("connections", { ascending: false })
+    .order("last_connected", { ascending: true })
     .limit(10);
   return { data, error };
 };
