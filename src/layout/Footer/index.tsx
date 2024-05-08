@@ -6,7 +6,6 @@ import LearnAboutKleros from "@/assets/learn-about-kleros.svg";
 import { socialmedia } from "@/consts/socialmedia";
 
 const Container = styled.div`
-  position: fixed;
   height: 122px;
   width: 100%;
   bottom: 0;
@@ -15,6 +14,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 24px;
   padding: 0 32px 8px 32px;
   gap: 24px;
 `;
