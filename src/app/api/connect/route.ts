@@ -1,4 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { type NextRequest, NextResponse } from "next/server";
+import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import {
   addAnswer,
@@ -7,15 +8,6 @@ import {
 } from "@/lib/supabase/queries";
 
 const ONE_MINUTE_THIRTY_SECONDS = 1.5 * 60 * 1000; // Giving 30 seconds extra to answer
-
-const verifyToken = (token: string): JwtPayload | undefined => {
-  try {
-    return jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-  } catch (error) {
-    console.error("JWT verification failed:", error);
-    return undefined;
-  }
-};
 
 const decryptData = async (
   id: string
@@ -28,23 +20,22 @@ const decryptData = async (
   }
 };
 
-export const POST = async (request: Request) => {
+export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
+  const token = request.cookies.get(TOKEN_COOKIE)?.value;
+  const userId = getUserId(token);
 
-  const token = request.headers.get("Cookie")?.replace("token=", "");
-
-  const tokenPayload = verifyToken(token as string);
-  if (!tokenPayload) {
-    return new Response("User is not authenticated!", { status: 401 });
+  if (!userId) {
+    return NotAuthenticatedResponse;
   }
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
-    return new Response("Invalid player QR, re-scan new QR", { status: 400 });
+    return new NextResponse("Invalid player QR, re-scan new QR", { status: 400 });
   }
 
-  if (decryptedData.userid === tokenPayload.user_id) {
-    return new Response("Oops, you cannot connect with yourself.", {
+  if (decryptedData.userid === userId) {
+    return new NextResponse("Oops, you cannot connect with yourself.", {
       status: 400,
     });
   }
@@ -54,35 +45,26 @@ export const POST = async (request: Request) => {
 
   if (
     isNaN(tokenTime) ||
-    currentTime > tokenTime ||
+    currentTime < tokenTime ||
     currentTime - tokenTime > ONE_MINUTE_THIRTY_SECONDS
   ) {
     return new Response("Question expired, re-scan new QR", { status: 408 });
   }
 
-  const isAlreadyAnswered = await checkAlreadyAnswered(
-    question_id,
-    tokenPayload.user_id
-  );
+  const isAlreadyAnswered = await checkAlreadyAnswered(question_id, userId);
   if (isAlreadyAnswered) {
-    return new Response("Already answered", { status: 400 });
+    return new NextResponse("Already answered", { status: 400 });
   }
 
-  const { error: addAnswerError } = await addAnswer(
-    question_id,
-    tokenPayload.user_id,
-    choice
-  );
+  const { error: addAnswerError } = await addAnswer(question_id, userId, choice);
   if (addAnswerError) {
-    return new Response("Failed to save your response", { status: 500 });
+    return new NextResponse("Failed to save your response", { status: 500 });
   }
 
-  const { error: connectionError } = await updateConnectionCount(
-    tokenPayload.user_id
-  );
+  const { error: connectionError } = await updateConnectionCount(userId);
   if (connectionError) {
-    return new Response("Failed to update your connection", { status: 500 });
+    return new NextResponse("Failed to update your connection", { status: 500 });
   }
 
-  return new Response("Connected successfully");
+  return new NextResponse("Connected successfully");
 };
