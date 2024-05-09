@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { UUID } from "crypto";
-import { getUserId, NotAuthenticatedResponse } from "@/lib/auth";
+import { TOKEN_COOKIE, getUserId, NotAuthenticatedResponse } from "@/lib/auth";
 import {
   checkUserExists,
   getUser,
@@ -50,7 +50,11 @@ export const POST = async (request: NextRequest) => {
   };
 
   const response = new NextResponse(JSON.stringify(responseBody));
-  response.headers.set("Set-Cookie", `token=${token}; HttpOnly; Path=/`);
+  response.cookies.set(
+    TOKEN_COOKIE,
+    token,
+    { maxAge: 31536000, path: "/", httpOnly: true },
+  );
 
   return response;
 };
