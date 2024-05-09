@@ -7,6 +7,7 @@ import Footer from "@/layout/Footer";
 
 const Main = styled.main`
   height: 100vh;
+  height: 100dvh;
 }
 `;
 
