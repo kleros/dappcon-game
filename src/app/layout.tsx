@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
-    <html lang="en">
-      <body className={font.className}>
+    <html lang="en" style={{ height: "100%" }}>
+      <body className={font.className} style={{ height: "100%" }}>
         <StyledComponentsRegistry>
           <ToastContainer />
           {children}
