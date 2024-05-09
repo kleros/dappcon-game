@@ -50,7 +50,10 @@ export const POST = async (request: NextRequest) => {
   };
 
   const response = new NextResponse(JSON.stringify(responseBody));
-  response.headers.set("Set-Cookie", `token=${token}; HttpOnly; Path=/`);
+  response.headers.set(
+    "Set-Cookie",
+    `token=${token}; HttpOnly; Path=/; Max-Age=31536000`
+  );
 
   return response;
 };
