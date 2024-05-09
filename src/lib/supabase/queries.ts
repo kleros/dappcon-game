@@ -52,7 +52,8 @@ export const getLeaderboard = async () => {
   const { data, error } = await supabase
     .from("leaderboard")
     .select()
-    .order("points", { ascending: false })
+    .order("connections", { ascending: false })
+    .order("last_connected", { ascending: true })
     .limit(10);
   return { data, error };
 };
