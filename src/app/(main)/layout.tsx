@@ -6,7 +6,7 @@ import Header from "@/layout/Header";
 import Footer from "@/layout/Footer";
 
 const Main = styled.main`
-  height: 100%;
+  height: 100vh;
 }
 `;
 
