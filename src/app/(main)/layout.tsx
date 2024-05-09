@@ -6,7 +6,7 @@ import Header from "@/layout/Header";
 import Footer from "@/layout/Footer";
 
 const Main = styled.main`
-  overflow-x: scroll;
+  overflow-y: scroll;
   height: 100vh;
   height: 100dvh;
 }
