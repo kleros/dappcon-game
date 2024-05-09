@@ -6,8 +6,9 @@ import Header from "@/layout/Header";
 import Footer from "@/layout/Footer";
 
 const Main = styled.main`
-  min-height: 100vh;
-  min-height: 100dvh;
+  overflow-x: scroll;
+  height: 100vh;
+  height: 100dvh;
 }
 `;
 
