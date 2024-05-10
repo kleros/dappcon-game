@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { darkTheme, Radio } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
-import { Database } from "@/types/supabase";
+import Timer from "@/components/Timer";
 import { toast } from "react-toastify";
 import { useQuestion } from "@/hooks/useQuestion";
 
@@ -55,6 +54,9 @@ interface QuestionProps {
 const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const { id } = useParams<{ id: string }>();
   const { isPending, error, question, submitAnswer } = useQuestion(id);
+  const expirytime =
+    Number(question?.timestamp ? question.timestamp : 0) + 90000;
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [radioValue, setRadioValue] = useState<string | null>(null);
@@ -97,6 +99,7 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   return (
     <Container>
       <StyledText>Schelling Question</StyledText>
+      <Timer expirytime={expirytime} />
       <StyledQuestion>{question?.question}</StyledQuestion>
       <Options>
         {question?.answers?.map((option, index) => (
