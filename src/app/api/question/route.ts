@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import { getQuestion } from "@/lib/supabase/queries";
+import { isGameEnded } from "@/lib/game.config";
 
 const ONE_MINUTE = 1 * 60 * 1000;
 
@@ -23,6 +24,10 @@ export const GET = async (request: NextRequest) => {
 
   if (!userId) {
     return NotAuthenticatedResponse;
+  }
+
+  if (isGameEnded()) {
+    return new NextResponse("Game has ended", { status: 400 });
   }
 
   const decryptedData = await decryptData(id!);
