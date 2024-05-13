@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
+import { TOKEN_DISTRIBUTION_TIMESTAMP } from "@/lib/game.config";
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +54,12 @@ const RewardClaimed: React.FC = () => {
       <Heading>Rewards Claimed!</Heading>
       <StyledH2>{!isPending && <>{data?.token} PNK</>}</StyledH2>
       <StyledMessage>
-        Claimed! Hold on. You will receive them before July 29, 2024.
+        Claimed! Hold on. You will receive them before{" "}
+        {new Date(TOKEN_DISTRIBUTION_TIMESTAMP * 1000).toLocaleDateString(
+          "en-US",
+          { day: "numeric", month: "long", year: "numeric" }
+        )}
+        .
       </StyledMessage>
       <StyledLinkButton
         className="marginTop"

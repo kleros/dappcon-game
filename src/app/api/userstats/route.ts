@@ -4,7 +4,7 @@ import { getUserStats } from "@/lib/supabase/queries";
 
 export const GET = async (request: NextRequest) => {
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = getUserId(token);
+  const userId = await getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;

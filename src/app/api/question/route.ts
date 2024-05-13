@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
-import { getQuestion } from "@/lib/supabase/queries";
+import { checkAlreadyAnswered, getQuestion } from "@/lib/supabase/queries";
+import { isGameEnded } from "@/lib/game.config";
 
 const ONE_MINUTE = 1 * 60 * 1000;
 
@@ -19,10 +20,14 @@ const decryptData = async (
 export const GET = async (request: NextRequest) => {
   const id = new URL(request.url).searchParams.get("id");
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = getUserId(token);
+  const userId = await getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;
+  }
+
+  if (isGameEnded()) {
+    return new NextResponse("Game has ended", { status: 400 });
   }
 
   const decryptedData = await decryptData(id!);
@@ -62,6 +67,12 @@ export const GET = async (request: NextRequest) => {
       ...data[0],
       timestamp: decryptedData.timestamp,
     };
+
+    const isAlreadyAnswered = await checkAlreadyAnswered(question.id, userId);
+    if (isAlreadyAnswered) {
+      return new NextResponse("You're already connected!", { status: 400 });
+    }
+
     return new NextResponse(JSON.stringify(question), {
       headers: { "Content-Type": "application/json" },
     });

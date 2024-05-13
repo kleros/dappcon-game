@@ -6,6 +6,7 @@ import {
   checkAlreadyAnswered,
   updateConnectionCount,
 } from "@/lib/supabase/queries";
+import { isGameEnded } from "@/lib/game.config";
 
 const ONE_MINUTE_THIRTY_SECONDS = 1.5 * 60 * 1000; // Giving 30 seconds extra to answer
 
@@ -23,10 +24,14 @@ const decryptData = async (
 export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = getUserId(token);
+  const userId = await getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;
+  }
+
+  if (isGameEnded()) {
+    return new NextResponse("Game has ended", { status: 400 });
   }
 
   const decryptedData = await decryptData(id!);
