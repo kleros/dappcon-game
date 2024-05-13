@@ -2,9 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import { checkAlreadyAnswered, getQuestion } from "@/lib/supabase/queries";
-import { isGameEnded } from "@/lib/game.config";
-
-const ONE_MINUTE = 1 * 60 * 1000;
+import { isGameEnded, QR_CODE_EXPIRY } from "@/lib/game.config";
 
 const decryptData = async (
   id: string
@@ -49,7 +47,7 @@ export const GET = async (request: NextRequest) => {
   if (
     isNaN(tokenTime) ||
     currentTime < tokenTime ||
-    currentTime - tokenTime > ONE_MINUTE
+    currentTime - tokenTime > QR_CODE_EXPIRY
   ) {
     return new NextResponse("QR expired, re-scan new QR", { status: 408 });
   }

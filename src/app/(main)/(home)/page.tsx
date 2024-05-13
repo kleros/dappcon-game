@@ -6,6 +6,8 @@ import LightLinkButton from "@/components/LightLinkButton";
 import useAuthentication from "@/hooks/useAuthentication";
 import { encrypt } from "@/lib/crypto";
 import QrReader from "./QrReader";
+import Timer from "@/components/Timer";
+import { QR_CODE_EXPIRY } from "@/lib/game.config";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -55,6 +57,7 @@ const getQRUrl = async (qrData: string): Promise<string> => {
 
 const Home: React.FC = () => {
   const [qrUrl, setQrUrl] = useState<string>("");
+  const [qrExpiryTimestamp, setQrExpiryTimestamp] = useState<number>(0);
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
   const { userid } = useAuthentication();
 
@@ -66,6 +69,7 @@ const Home: React.FC = () => {
       try {
         const url = await getQRUrl(qrData);
         setQrUrl(url);
+        setQrExpiryTimestamp(Number(timestamp) + QR_CODE_EXPIRY);
       } catch (error) {
         console.error("Error generating QR code:", error);
       }
@@ -104,7 +108,10 @@ const Home: React.FC = () => {
           <ScannerContainer>
             <StyledText>My QR</StyledText>
             {qrUrl ? (
-              <StyledQR src={qrUrl} alt="My QR Code" />
+              <>
+                <Timer expirytime={qrExpiryTimestamp} />
+                <StyledQR src={qrUrl} alt="My QR Code" />
+              </>
             ) : (
               <StyledLoader>Loading QR...</StyledLoader>
             )}
