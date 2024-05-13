@@ -8,12 +8,14 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "qr": "node ./scripts/qr-generator.js"
+    "qr": "node ./scripts/qr-generator.js",
+    "upload-questions": "node ./scripts/bulk-questions-uploader.js"
   },
   "dependencies": {
     "@kleros/ui-components-library": "^2.9.0",
     "@supabase/supabase-js": "^2.42.0",
     "@tanstack/react-query": "^5.28.4",
+    "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "next": "14.1.3",

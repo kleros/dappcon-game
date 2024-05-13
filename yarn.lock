@@ -5359,6 +5359,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: "npm:^1.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 10c0/206aef102c10d532a31c7d85e6b1b0e53c7cb8346037eb9f23e0bd7369788960d8f2431639ea9f62e34ddf54d0182dfb345691c11c666802324f25c51dba79bc
+  languageName: node
+  linkType: hard
+
 "damerau-levenshtein@npm:^1.0.8":
   version: 1.0.8
   resolution: "damerau-levenshtein@npm:1.0.8"
@@ -7981,6 +7992,7 @@ __metadata:
     "@types/styled-components": "npm:^5.1.34"
     "@types/uuid": "npm:^9"
     "@wagmi/cli": "npm:^2.1.2"
+    csv-parser: "npm:^3.0.0"
     dotenv: "npm:^16.4.5"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.1.3"
