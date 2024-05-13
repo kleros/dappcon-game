@@ -12,7 +12,7 @@ if (!fs.existsSync(outputDirectory)) {
 }
 
 const SECRET_KEY = process.env.SECRET_KEY;
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!SECRET_KEY || !BASE_URL) {
   console.error("Please provide a SECRET_KEY & BASE_URL in the .env file.");
@@ -22,10 +22,10 @@ if (!SECRET_KEY || !BASE_URL) {
 const amount = process.argv[2] ? parseInt(process.argv[2]) : 1;
 
 for (let i = 1; i <= amount; i++) {
-  const userId = uuidv4();
-  const payload = { userId };
+  const user_id = uuidv4();
+  const payload = { user_id };
   const token = jwt.sign(payload, SECRET_KEY);
-  const qr_png = qr.image(BASE_URL+"?" + token, {
+  const qr_png = qr.image(BASE_URL+"/auth?token=" + token, {
     type: "png",
   });
   qr_png.pipe(fs.createWriteStream(`${outputDirectory}/qr_token_${i}.png`));

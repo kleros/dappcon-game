@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import RewardsIcon from "@/assets/rewards-dark.svg";
 import LightLinkButton from "@/components/LightLinkButton";
-import { leaderboardData, userData } from "@/consts/dummy-data";
+import { isGameConcluded } from "@/lib/game.config";
 import Table from "./Table";
 import UserPoints from "./UserPoints";
 
@@ -26,15 +26,16 @@ const StyledLinkButton = styled(LightLinkButton)`
 `;
 
 const Leaderboard: React.FC = () => {
+  const gameConcluded = useMemo(() => isGameConcluded(), []);
   return (
     <Container>
       <Heading>Leaderboard</Heading>
-      <Table LeaderboardData={leaderboardData} />
-      <UserPoints {...userData} />
+      <Table />
+      <UserPoints />
       <StyledLinkButton
-        url="/leaderboard/claim"
-        Icon={RewardsIcon}
-        text="Claim my Rewards"
+        url={gameConcluded ? "/leaderboard/claim" : "/"}
+        Icon={gameConcluded && RewardsIcon}
+        text={gameConcluded ? "Claim my Rewards" : "Return"}
       />
     </Container>
   );

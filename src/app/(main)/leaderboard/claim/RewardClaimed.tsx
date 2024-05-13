@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
+import { TOKEN_DISTRIBUTION_TIMESTAMP } from "@/lib/game.config";
 
 const Container = styled.div`
   display: flex;
@@ -34,14 +36,30 @@ const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
 
+interface UserItem {
+  username: string;
+  connections: number;
+  points: number;
+  token: number;
+  rank: number;
+}
+
 const RewardClaimed: React.FC = () => {
+  const { isPending, data } = useQuery<UserItem>({
+    queryKey: ["userstats"],
+  });
   return (
     <Container>
       <StyledText>Well Done!</StyledText>
       <Heading>Rewards Claimed!</Heading>
-      <StyledH2>300PNK</StyledH2>
+      <StyledH2>{!isPending && <>{data?.token} PNK</>}</StyledH2>
       <StyledMessage>
-        Claimed! Hold on. You will receive them before July 29, 2024.
+        Claimed! Hold on. You will receive them before{" "}
+        {new Date(TOKEN_DISTRIBUTION_TIMESTAMP * 1000).toLocaleDateString(
+          "en-US",
+          { day: "numeric", month: "long", year: "numeric" }
+        )}
+        .
       </StyledMessage>
       <StyledLinkButton
         className="marginTop"
