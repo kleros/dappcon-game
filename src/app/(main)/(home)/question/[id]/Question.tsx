@@ -7,6 +7,7 @@ import LightLinkButton from "@/components/LightLinkButton";
 import Timer from "@/components/Timer";
 import { toast } from "react-toastify";
 import { useQuestion } from "@/hooks/useQuestion";
+import { QUESTION_TIMEOUT_WINDOW } from "@/lib/game.config";
 
 const Container = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const { id } = useParams<{ id: string }>();
   const { isPending, error, question, submitAnswer } = useQuestion(id);
   const expirytime =
-    Number(question?.timestamp ? question.timestamp : 0) + 90000;
+    Number(question?.timestamp ? question.timestamp : 0) + QUESTION_TIMEOUT_WINDOW;
 
   const [loading, setLoading] = useState<boolean>(false);
 

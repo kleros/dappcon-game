@@ -7,6 +7,7 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { encrypt } from "@/lib/crypto";
 import QrReader from "./QrReader";
 import Timer from "@/components/Timer";
+import { QR_CODE_EXPIRY } from "@/lib/game.config";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -68,7 +69,7 @@ const Home: React.FC = () => {
       try {
         const url = await getQRUrl(qrData);
         setQrUrl(url);
-        setQrExpiryTimestamp(Number(timestamp) + 60000);
+        setQrExpiryTimestamp(Number(timestamp) + QR_CODE_EXPIRY);
       } catch (error) {
         console.error("Error generating QR code:", error);
       }
