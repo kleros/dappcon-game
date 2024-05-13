@@ -18,6 +18,7 @@ const Container = styled.div`
 `;
 
 const ScannerContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -53,6 +54,22 @@ const getQRUrl = async (qrData: string): Promise<string> => {
   return QRCode.toDataURL(BASE_URL + "/question/" + encryptedData);
 };
 
+interface IScanner {
+  setIsScannerOpen: (arg0: boolean) => void;
+}
+
+const Scanner: React.FC<IScanner> = ({ setIsScannerOpen }) => {
+  return (
+    <ScannerContainer>
+      <QrReader />
+      <StyledLinkButton
+        onClick={() => setIsScannerOpen(false)}
+        text="Go back"
+      />
+    </ScannerContainer>
+  );
+};
+
 const Home: React.FC = () => {
   const [qrUrl, setQrUrl] = useState<string>("");
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
@@ -78,20 +95,11 @@ const Home: React.FC = () => {
     }
   }, [userid]);
 
-  const Scanner: React.FC = () => {
-    return (
-      <ScannerContainer>
-        <StyledText>Scan another player</StyledText>
-        <QrReader />
-      </ScannerContainer>
-    );
-  };
-
   return (
     <Container>
       <Heading>Kleros Schelling Game</Heading>
       {isScannerOpen ? (
-        <Scanner />
+        <Scanner {...{ setIsScannerOpen }} />
       ) : (
         <>
           <ScannerContainer>
