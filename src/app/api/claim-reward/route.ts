@@ -7,7 +7,7 @@ import { isGameConcluded } from "@/lib/game.config";
 export const POST = async (request: NextRequest) => {
   const { address } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = getUserId(token);
+  const userId = await getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;
