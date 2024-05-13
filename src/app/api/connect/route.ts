@@ -22,7 +22,7 @@ const decryptData = async (
 export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = await getUserId(token);
+  const userId = getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;
