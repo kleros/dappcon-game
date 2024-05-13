@@ -17,7 +17,7 @@ interface ResponseBody {
 
 export const POST = async (request: NextRequest) => {
   const { token, username } = await request.json();
-  const userId = await getUserId(token);
+  const userId = getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;

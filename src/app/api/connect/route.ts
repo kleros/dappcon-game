@@ -6,9 +6,7 @@ import {
   checkAlreadyAnswered,
   updateConnectionCount,
 } from "@/lib/supabase/queries";
-import { isGameEnded } from "@/lib/game.config";
-
-const ONE_MINUTE_THIRTY_SECONDS = 1.5 * 60 * 1000; // Giving 30 seconds extra to answer
+import { isGameEnded, QUESTION_TIMEOUT_WINDOW } from "@/lib/game.config";
 
 const decryptData = async (
   id: string
@@ -24,7 +22,7 @@ const decryptData = async (
 export const POST = async (request: NextRequest) => {
   const { id, question_id, choice } = await request.json();
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
-  const userId = await getUserId(token);
+  const userId = getUserId(token);
 
   if (!userId) {
     return NotAuthenticatedResponse;
@@ -51,7 +49,7 @@ export const POST = async (request: NextRequest) => {
   if (
     isNaN(tokenTime) ||
     currentTime < tokenTime ||
-    currentTime - tokenTime > ONE_MINUTE_THIRTY_SECONDS
+    currentTime - tokenTime > QUESTION_TIMEOUT_WINDOW
   ) {
     return new Response("Question expired, re-scan new QR", { status: 408 });
   }
