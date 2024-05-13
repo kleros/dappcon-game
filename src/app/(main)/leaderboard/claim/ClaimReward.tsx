@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import LabeledInput from "@/components/LabeledInput";
 import useClaimReward from "@/hooks/useClaimReward";
+import { isGameConcluded } from "@/lib/game.config";
 import { TableContainer, TableCellWrapper, TableCell } from "../Table";
 import UserPoints from "../UserPoints";
 
@@ -58,6 +59,7 @@ interface UserItem {
 const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
   const [address, setAddress] = useState<string>("");
   const { isLoading, claimReward } = useClaimReward();
+  const gameConcluded = useMemo(() => isGameConcluded(), []);
 
   const { isPending, data } = useQuery<UserItem>({
     queryKey: ["userstats"],
@@ -72,7 +74,7 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
       await claimReward(address);
       setClaimed(true);
     } catch (error: any) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -83,9 +85,9 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
         <TableCellWrapper rankHeader>
           <TableCell>Rankings</TableCell>
         </TableCellWrapper>
-        <TableCellWrapper>
+        <TableCellWrapper isGameConcluded={gameConcluded}>
           <TableCell>Connections</TableCell>
-          <TableCell>Pts.</TableCell>
+          {gameConcluded && <TableCell>Pts.</TableCell>}
           <TableCell>
             Est. <RewardsIcon />
           </TableCell>

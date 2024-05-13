@@ -1,6 +1,6 @@
-import { type NextRequest } from "next/server";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { type NextRequest, NextResponse } from "next/server";
 import { UUID } from "crypto";
+import { TOKEN_COOKIE, getUserId, NotAuthenticatedResponse } from "@/lib/auth";
 import {
   checkUserExists,
   getUser,
@@ -17,44 +17,44 @@ interface ResponseBody {
 
 export const POST = async (request: NextRequest) => {
   const { token, username } = await request.json();
-  let user_id: UUID | null = null;
-  try {
-    const payload = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-    user_id = payload.user_id;
-  } catch (error) {
-    return new Response("Invalid token, Scan the QR correctly", {
-      status: 403,
-    });
+  const userId = getUserId(token);
+
+  if (!userId) {
+    return NotAuthenticatedResponse;
   }
 
-  if (await checkUserExists(user_id!)) {
-    const user = await getUser(user_id!);
+  if (await checkUserExists(userId)) {
+    const user = await getUser(userId);
     if (user.error) {
-      return new Response(user.error.details, { status: 500 });
+      return new NextResponse(user.error.details, { status: 500 });
     }
     if (user.data?.username !== username) {
-      return new Response("Invalid username, Try again with correct one!", {
+      return new NextResponse("Invalid username, Try again with correct one!", {
         status: 403,
       });
     }
   } else {
-    const user = await setUser(user_id!, username);
+    const user = await setUser(userId, username);
     if (user.error) {
-      return new Response(user.error.details, { status: 500 });
+      return new NextResponse(user.error.details, { status: 500 });
     }
   }
 
   const connections = (await getConnections(username)).data?.connections || 0;
 
   const responseBody: ResponseBody = {
-    user_id: user_id!,
+    user_id: userId,
     username,
     connections,
     token,
   };
 
-  const response = new Response(JSON.stringify(responseBody));
-  response.headers.set("Set-Cookie", `token=${token}; HttpOnly; Path=/`);
+  const response = new NextResponse(JSON.stringify(responseBody));
+  response.cookies.set(
+    TOKEN_COOKIE,
+    token,
+    { maxAge: 31536000, path: "/", httpOnly: true },
+  );
 
   return response;
 };

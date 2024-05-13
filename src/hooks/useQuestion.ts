@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Database } from "@/types/supabase";
 
-type Question = Database["public"]["Tables"]["questions"]["Row"];
+type Question = Database["public"]["Tables"]["questions"]["Row"] & {
+  timestamp: number;
+};
 
 export const useQuestion = (id: string) => {
   const {

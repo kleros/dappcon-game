@@ -90,10 +90,10 @@ const Auth: React.FC = () => {
       </Heading>
       <FormContainer>
         <StyledDivider top />
-        <StyledText>Type your name to start</StyledText>
+        <StyledText>Type your username to start</StyledText>
         <LabeledInput
-          name="Name"
-          label="Name"
+          name="Username"
+          label="Username"
           placeholder="Bob"
           onChange={(e) => setUsername(e.target.value)}
         />

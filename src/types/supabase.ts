@@ -70,18 +70,21 @@ export type Database = {
       leaderboard: {
         Row: {
           connections: number
+          last_connected: string
           points: number
           token: number
           username: string
         }
         Insert: {
           connections?: number
+          last_connected?: string
           points?: number
           token?: number
           username: string
         }
         Update: {
           connections?: number
+          last_connected?: string
           points?: number
           token?: number
           username?: string

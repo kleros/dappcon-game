@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import RewardsIcon from "@/assets/rewards.svg";
 import { darkTheme } from "@kleros/ui-components-library";
 import { Database } from "@/types/supabase";
+import { isGameConcluded } from "@/lib/game.config";
 
 export const TableContainer = styled.div`
   display: grid;
@@ -21,9 +22,11 @@ export const TableCell = styled.div<{ rank?: boolean }>`
 export const TableCellWrapper = styled.div<{
   rank?: boolean;
   rankHeader?: boolean;
+  isGameConcluded?: boolean;
 }>`
   display: grid;
-  grid-template-columns: ${({ rank }) => (rank ? "1fr 3fr" : "repeat(3, 1fr)")};
+  grid-template-columns: ${({ rank, isGameConcluded }) =>
+    rank ? "1fr 3fr" : isGameConcluded ? "repeat(3, 1fr)" : "repeat(2, 1fr)"};
 
   text-align: ${({ rankHeader, rank }) =>
     rankHeader ? "left" : rank ? "left" : "right"};
@@ -34,6 +37,7 @@ export const TableCellWrapper = styled.div<{
 type LeaderboardItem = Database["public"]["Tables"]["leaderboard"]["Row"];
 
 const Table: React.FC = () => {
+  const gameConcluded = useMemo(() => isGameConcluded(), []);
   const { isPending, error, data } = useQuery<LeaderboardItem[]>({
     queryKey: ["leaderboardData"],
     queryFn: () => fetch("/api/leaderboard").then((res) => res.json()),
@@ -48,9 +52,9 @@ const Table: React.FC = () => {
       <TableCellWrapper rankHeader>
         <TableCell>Top 10</TableCell>
       </TableCellWrapper>
-      <TableCellWrapper>
+      <TableCellWrapper isGameConcluded={gameConcluded}>
         <TableCell>Connections</TableCell>
-        <TableCell>Pts.</TableCell>
+        {gameConcluded && <TableCell>Pts.</TableCell>}
         <TableCell>
           Est. <RewardsIcon />
         </TableCell>
@@ -61,9 +65,9 @@ const Table: React.FC = () => {
             <TableCell rank>#{index + 1}</TableCell>
             <TableCell>{item.username.length > 8 ? `${item.username.slice(0, 8)}...` : item.username}</TableCell>
           </TableCellWrapper>
-          <TableCellWrapper>
+          <TableCellWrapper isGameConcluded={gameConcluded}>
             <TableCell>{item.connections}</TableCell>
-            <TableCell>{item.points}</TableCell>
+            {gameConcluded && <TableCell>{item.points}</TableCell>}
             <TableCell>~{item.token} PNK</TableCell>
           </TableCellWrapper>
         </React.Fragment>

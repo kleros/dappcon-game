@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import { Database } from "@/types/supabase";
+import { isGameConcluded } from "@/lib/game.config";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
 
 const Container = styled.div`
@@ -21,6 +22,7 @@ const MyRank = styled(TableCell)`
 type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"][0];
 
 const UserPoints: React.FC = () => {
+  const gameConcluded = useMemo(() => isGameConcluded(), []);
   const { isPending, error, data } = useQuery<UserItem>({
     queryKey: ["userstats"],
     queryFn: () => fetch("/api/userstats").then((res) => res.json()),
@@ -41,9 +43,9 @@ const UserPoints: React.FC = () => {
               : data.username}
           </TableCell>
         </TableCellWrapper>
-        <TableCellWrapper>
+        <TableCellWrapper isGameConcluded={gameConcluded}>
           <TableCell>{data.connections}</TableCell>
-          <TableCell>{data.points}</TableCell>
+          {gameConcluded && <TableCell>{data.points}</TableCell>}
           <TableCell>~{data.token}PNK</TableCell>
         </TableCellWrapper>
       </TableContainer>
