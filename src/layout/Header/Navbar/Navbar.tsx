@@ -5,6 +5,7 @@ import { darkTheme } from "@kleros/ui-components-library";
 import UserIcon from "@/assets/user.svg";
 import ConnectionsIcon from "@/assets/connections.svg";
 import Explore from "@/layout/Header/Navbar/Explore";
+import { getUserId } from "@/layout/Header/getUserId";
 import { useOpenContext } from "./MobileHeader";
 
 const Wrapper = styled.div<{ isOpen: boolean }>`
@@ -61,7 +62,11 @@ const NavBar: React.FC = () => {
   const { isOpen } = useOpenContext();
   const { data } = useQuery<UserItem>({
     queryKey: ["userstats"],
-    queryFn: () => fetch("/api/userstats").then((res) => res.json()),
+    queryFn: async () => {
+      const userId = await getUserId();
+      if (userId)
+        return fetch("/api/userstats").then((res) => res.json())
+    },
   });
 
   return (
