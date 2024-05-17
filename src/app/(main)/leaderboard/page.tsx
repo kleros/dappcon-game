@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 import RewardsIcon from "@/assets/rewards-dark.svg";
 import LightLinkButton from "@/components/LightLinkButton";
-import { isGameConcluded } from "@/lib/game.config";
+import { isGameEnded } from "@/lib/game.config";
 import Table from "./Table";
 import UserPoints from "./UserPoints";
 
@@ -26,16 +26,16 @@ const StyledLinkButton = styled(LightLinkButton)`
 `;
 
 const Leaderboard: React.FC = () => {
-  const gameConcluded = useMemo(() => isGameConcluded(), []);
+  const gameEnded = useMemo(() => isGameEnded(), []);
   return (
     <Container>
       <Heading>Leaderboard</Heading>
       <Table />
       <UserPoints />
       <StyledLinkButton
-        url={gameConcluded ? "/leaderboard/claim" : "/"}
-        Icon={gameConcluded && RewardsIcon}
-        text={gameConcluded ? "Claim my Rewards" : "Return"}
+        url={gameEnded ? "/leaderboard/claim" : "/"}
+        Icon={gameEnded && RewardsIcon}
+        text={gameEnded ? "Claim my Rewards" : "Return"}
       />
     </Container>
   );

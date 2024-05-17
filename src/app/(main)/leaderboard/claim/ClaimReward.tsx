@@ -106,7 +106,7 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
           disabled={isLoading}
           Icon={RewardsDarkIcon}
           onClick={handleClaim}
-          text={isLoading ? "Claiming..." : "Claim"}
+          text={isLoading ? "Submitting..." : "Submit Address"}
         />
       </ClaimSection>
     </Container>

@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { isAddress } from "viem";
 import { checkUserExists, claimRewards } from "@/lib/supabase/queries";
 import { getUserId, NotAuthenticatedResponse, TOKEN_COOKIE } from "@/lib/auth";
-import { isGameConcluded } from "@/lib/game.config";
+import { isGameEnded } from "@/lib/game.config";
 
 export const POST = async (request: NextRequest) => {
   const { address } = await request.json();
@@ -13,8 +13,8 @@ export const POST = async (request: NextRequest) => {
     return NotAuthenticatedResponse;
   }
 
-  if(!isGameConcluded()) {
-    return new NextResponse("Game is not concluded yet", { status: 400 });
+  if (!isGameEnded()) {
+    return new NextResponse("Game is not ended yet", { status: 400 });
   }
 
   if (!isAddress(address.toLowerCase())) {
