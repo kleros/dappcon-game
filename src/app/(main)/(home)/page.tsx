@@ -7,7 +7,7 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { encrypt } from "@/lib/crypto";
 import QrReader from "./QrReader";
 import Timer from "@/components/Timer";
-import { QR_CODE_EXPIRY } from "@/lib/game.config";
+import { QR_CODE_EXPIRY, GAME_END_TIMESTAMP } from "@/lib/game.config";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -39,8 +39,19 @@ const StyledLoader = styled.p`
   font-weight: 200;
 `;
 
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
 const Heading = styled.h2`
   font-weight: 400;
+`;
+
+const Description = styled.p`
+  font-weight: 200;
+  font-size: 14px;
 `;
 
 const StyledText = styled.p`
@@ -101,7 +112,18 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <Heading>Kleros Schelling Game</Heading>
+      <HeaderContainer>
+        <Heading>Kleros Schelling Game</Heading>
+        <Description>
+          until{" "}
+          {new Date(GAME_END_TIMESTAMP * 1000).toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          })}{" "}
+          at midnight
+        </Description>
+      </HeaderContainer>
       {isScannerOpen ? (
         <Scanner {...{ setIsScannerOpen }} />
       ) : (
