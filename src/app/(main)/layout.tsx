@@ -2,6 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Theme from "@/styles/Theme";
 import Header from "@/layout/Header";
 import Footer from "@/layout/Footer";
 
@@ -27,13 +28,15 @@ const queryClient = new QueryClient();
 const Layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Main>
-        <Container>
-          <Header />
-          {children}
-          <Footer />
-        </Container>
-      </Main>
+      <Theme>
+        <Main>
+          <Container>
+            <Header />
+            {children}
+            <Footer />
+          </Container>
+        </Main>
+      </Theme>
     </QueryClientProvider>
   );
 };
