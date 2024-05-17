@@ -31,11 +31,6 @@ const StyledRadio = styled(Radio)`
   text-align: left;
   font-weight: 400;
   font-size: 16px;
-  & > input ~ span {
-    border: 1px solid ${darkTheme.klerosUIComponentsPrimaryBlue};
-  }
-  & > input:checked ~ span {
-    background: ${darkTheme.klerosUIComponentsPrimaryBlue};
   }
 `;
 
