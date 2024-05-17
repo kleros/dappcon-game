@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
+import { Database } from "@/types/supabase";
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +34,15 @@ const StyledLinkButton = styled(LightLinkButton)`
   margin-top: 28px;
 `;
 
+type UserItem = Database["public"]["Functions"]["get_user_stats"]["Returns"][0];
+
 const Solved: React.FC = () => {
+  //update connection count on navbar after solving the question
+  const updateConnectionCount = useQuery<UserItem>({
+    queryKey: ["userstats"],
+    queryFn: () => fetch("/api/userstats").then((res) => res.json()),
+  });
+
   return (
     <Container>
       <StyledText>Well Done!</StyledText>
