@@ -78,8 +78,9 @@ const Auth: React.FC = () => {
       toast.success("Authenticated successfully , Redirecting...");
       window.location.reload();
     } catch (error: any) {
+      console.log("auth error", error);
       toast.error(
-        error.message ?? "Failed to authenticate, QR code is not valid"
+        error?.message ?? "Failed to authenticate, QR code is not valid"
       );
     }
   };
