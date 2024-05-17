@@ -51,10 +51,10 @@ const RewardClaimed: React.FC = () => {
   return (
     <Container>
       <StyledText>Well Done!</StyledText>
-      <Heading>Rewards Claimed!</Heading>
+      <Heading>Address Submitted!</Heading>
       <StyledH2>{!isPending && <>{data?.token} PNK</>}</StyledH2>
       <StyledMessage>
-        Claimed! Hold on. You will receive them before{" "}
+        Submitted! You will receive them before{" "}
         {new Date(TOKEN_DISTRIBUTION_TIMESTAMP * 1000).toLocaleDateString(
           "en-US",
           { day: "numeric", month: "long", year: "numeric" }
