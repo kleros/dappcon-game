@@ -20,6 +20,11 @@ const Heading = styled.h2`
   font-weight: 400;
 `;
 
+const Note = styled.p`
+  font-size: 12px;
+  color: ${({ theme }) => theme.klerosUIComponentsSecondaryBlue};
+`;
+
 const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
   margin-top: 28px;
@@ -32,6 +37,10 @@ const Leaderboard: React.FC = () => {
       <Heading>Leaderboard</Heading>
       <Table />
       <UserPoints />
+      <Note>
+        The PNK shown is just an estimate, the true value will depend on your
+        performance
+      </Note>
       <StyledLinkButton
         url={gameEnded ? "/leaderboard/claim" : "/"}
         Icon={gameEnded && RewardsIcon}
