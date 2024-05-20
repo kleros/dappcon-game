@@ -6,6 +6,7 @@ import RewardsIcon from "@/assets/rewards.svg";
 import { darkTheme } from "@kleros/ui-components-library";
 import { Database } from "@/types/supabase";
 import { isGameConcluded } from "@/lib/game.config";
+import { formatNumber } from "@/lib/utils";
 
 export const TableContainer = styled.div`
   display: grid;
@@ -68,7 +69,7 @@ const Table: React.FC = () => {
           <TableCellWrapper isGameConcluded={gameConcluded}>
             <TableCell>{item.connections}</TableCell>
             {gameConcluded && <TableCell>{item.points}</TableCell>}
-            <TableCell>~{item.token} PNK</TableCell>
+            <TableCell>~{formatNumber(item.token)} PNK</TableCell>
           </TableCellWrapper>
         </React.Fragment>
       ))}

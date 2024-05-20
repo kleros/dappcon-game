@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import { TOKEN_DISTRIBUTION_TIMESTAMP } from "@/lib/game.config";
+import { formatNumber } from "@/lib/utils";
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +33,11 @@ const StyledMessage = styled(StyledText)`
   padding: 10px;
 `;
 
+const Note = styled.p`
+  font-size: 12px;
+  color: ${({ theme }) => theme.klerosUIComponentsSecondaryBlue};
+`;
+
 const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
 `;
@@ -52,7 +58,7 @@ const RewardClaimed: React.FC = () => {
     <Container>
       <StyledText>Well Done!</StyledText>
       <Heading>Address Submitted!</Heading>
-      <StyledH2>{!isPending && <>{data?.token} PNK</>}</StyledH2>
+      <StyledH2>{!isPending && <>{formatNumber(data?.token!)} PNK</>}</StyledH2>
       <StyledMessage>
         Submitted! You will receive them before{" "}
         {new Date(TOKEN_DISTRIBUTION_TIMESTAMP * 1000).toLocaleDateString(
@@ -66,6 +72,10 @@ const RewardClaimed: React.FC = () => {
         url="/leaderboard"
         text="Return"
       />
+      <Note>
+        The PNK shown is just an estimate, the true value will depend on your
+        performance
+      </Note>
     </Container>
   );
 };

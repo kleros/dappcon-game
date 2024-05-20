@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { darkTheme } from "@kleros/ui-components-library";
 import { Database } from "@/types/supabase";
 import { isGameConcluded } from "@/lib/game.config";
+import { formatNumber } from "@/lib/utils";
 import { TableContainer, TableCellWrapper, TableCell } from "./Table";
 
 const Container = styled.div`
@@ -30,7 +31,7 @@ const UserPoints: React.FC = () => {
 
   if (isPending) return <div>please wait...</div>;
 
-  if (error) return <div>{error.message} an error occured</div>;
+  if (error) return <div>something went wrong...</div>;
 
   return (
     <Container>
@@ -46,7 +47,7 @@ const UserPoints: React.FC = () => {
         <TableCellWrapper isGameConcluded={gameConcluded}>
           <TableCell>{data.connections}</TableCell>
           {gameConcluded && <TableCell>{data.points}</TableCell>}
-          <TableCell>~{data.token}PNK</TableCell>
+          <TableCell>~{formatNumber(data.token)} PNK</TableCell>
         </TableCellWrapper>
       </TableContainer>
     </Container>

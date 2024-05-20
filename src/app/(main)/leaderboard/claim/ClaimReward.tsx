@@ -11,6 +11,7 @@ import LightLinkButton from "@/components/LightLinkButton";
 import LabeledInput from "@/components/LabeledInput";
 import useClaimReward from "@/hooks/useClaimReward";
 import { isGameConcluded } from "@/lib/game.config";
+import { formatNumber } from "@/lib/utils";
 import { TableContainer, TableCellWrapper, TableCell } from "../Table";
 import UserPoints from "../UserPoints";
 
@@ -37,6 +38,11 @@ const ClaimSection = styled.div`
 
 const Heading = styled.h2`
   font-weight: 400;
+`;
+
+const Note = styled.p`
+  font-size: 12px;
+  color: ${({ theme }) => theme.klerosUIComponentsSecondaryBlue};
 `;
 
 const StyledLinkButton = styled(LightLinkButton)`
@@ -94,7 +100,9 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
         </TableCellWrapper>
       </TableContainer>
       <UserPoints />
-      <ClaimAmount>{!isPending && <>Amount: {data?.token} PNK</>}</ClaimAmount>
+      <ClaimAmount>
+        {!isPending && <>Amount: ~{formatNumber(data?.token!)} PNK</>}
+      </ClaimAmount>
       <ClaimSection>
         Type the address you want to receive the rewards
         <LabeledInput
@@ -109,6 +117,10 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
           text={isLoading ? "Submitting..." : "Submit Address"}
         />
       </ClaimSection>
+      <Note>
+        The PNK shown is just an estimate, the true value will depend on your
+        performance
+      </Note>
     </Container>
   );
 };
