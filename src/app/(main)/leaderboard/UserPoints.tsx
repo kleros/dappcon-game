@@ -31,7 +31,7 @@ const UserPoints: React.FC = () => {
 
   if (isPending) return <div>please wait...</div>;
 
-  if (error) return <div>{error.message} an error occured</div>;
+  if (error) return <div>🤔 something went wrong...</div>;
 
   return (
     <Container>
