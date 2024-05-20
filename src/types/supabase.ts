@@ -151,6 +151,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_total_connection_count: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          total_count: number
+        }[]
+      }
       get_user_stats: {
         Args: {
           user_id_params: string

@@ -48,6 +48,14 @@ export const updateConnectionCount = async (user_id: UUID) => {
   return { data, error };
 };
 
+export const getTotalConnectionCount = async () => {
+  const { data, error } = await supabase
+    .rpc("get_total_connection_count")
+    .select();
+
+  return { data, error };
+};
+
 export const getLeaderboard = async () => {
   const { data, error } = await supabase
     .from("leaderboard")
