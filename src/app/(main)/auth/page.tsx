@@ -8,6 +8,7 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { toast } from "react-toastify";
 
 const MIN_USERNAME_LENGTH = 3;
+const MAX_USERNAME_LENGTH = 16;
 
 const Container = styled.div`
   display: flex;
@@ -65,9 +66,12 @@ const Auth: React.FC = () => {
   }, []);
 
   const handleStart = async () => {
-    if (username.length < MIN_USERNAME_LENGTH) {
+    if (
+      username.length < MIN_USERNAME_LENGTH ||
+      username.length > MAX_USERNAME_LENGTH
+    ) {
       setUsernameError(
-        `Username must be at least ${MIN_USERNAME_LENGTH} characters long`
+        `Username must be between ${MIN_USERNAME_LENGTH} - ${MAX_USERNAME_LENGTH} characters in length.`
       );
       return;
     }
@@ -78,7 +82,11 @@ const Auth: React.FC = () => {
       toast.success("Authenticated successfully , Redirecting...");
       window.location.reload();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(
+        error.message
+          ? error.message
+          : "Failed to authenticate, QR code is not valid."
+      );
     }
   };
 
