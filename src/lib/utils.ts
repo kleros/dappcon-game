@@ -7,6 +7,6 @@ export const formatNumber = (number: number): string => {
   } else if (number >= 1000) {
     return Math.floor(number / 1000) + "k";
   } else {
-    return number.toString();
+    return number?.toString() ?? "0";
   }
 };
