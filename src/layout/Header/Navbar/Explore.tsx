@@ -29,12 +29,18 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
   font-weight: ${({ isActive }) => (isActive ? "bold" : "normal")};
 `;
 
+const StyledButton = styled.button`
+  color: ${darkTheme.klerosUIComponentsPrimaryText};
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+`;
+
 const links = [
   { to: "/", text: "Home" },
   { to: "/rules", text: "Rules" },
   { to: "/leaderboard", text: "Leaderboard" },
   { to: "/about", text: "About Kleros" },
-  { to: "/logout", text: "LogOut" },
 ];
 
 const Explore: React.FC = () => {
@@ -53,6 +59,11 @@ const Explore: React.FC = () => {
           >
             {text}
           </StyledLink>
+          <StyledButton
+            onClick={() => fetch("/api/logout", { method: "POST" })}
+          >
+            LogOut
+          </StyledButton>
         </LinkContainer>
       ))}
     </Container>
