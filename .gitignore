@@ -36,5 +36,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-./qr_codes/*
-./qr_codes.zip
+/qr_codes/*
+/qr_codes.zip
