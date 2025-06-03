@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 const MIN_USERNAME_LENGTH = 3;
 const MAX_USERNAME_LENGTH = 16;
+const TOKEN_NOT_FOUND = "not_found";
 
 const Container = styled.div`
   display: flex;
@@ -62,7 +63,7 @@ const Auth: React.FC = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    setToken(searchParams.get("token") || "");
+    setToken(searchParams.get("token") || TOKEN_NOT_FOUND);
   }, []);
 
   const handleStart = async () => {
@@ -98,19 +99,26 @@ const Auth: React.FC = () => {
       </Heading>
       <FormContainer>
         <StyledDivider top />
-        <StyledText>Type your username to start</StyledText>
-        <LabeledInput
-          name="Username"
-          label="Username"
-          placeholder="Bob"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        {usernameError && <FormError>{usernameError}</FormError>}
-        <StyledLinkButton
-          text={isLoading ? "Authenticating..." : "Start"}
-          disabled={isLoading}
-          onClick={handleStart}
-        />
+        {token === TOKEN_NOT_FOUND
+          ? <StyledLinkButton text="Rules" url="/rules" />
+          : (
+            <>
+              <StyledText>Type your username to start</StyledText>
+              <LabeledInput
+                name="Username"
+                label="Username"
+                placeholder="Bob"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              {usernameError && <FormError>{usernameError}</FormError>}
+              <StyledLinkButton
+                text={isLoading ? "Authenticating..." : "Start"}
+                disabled={isLoading}
+                onClick={handleStart}
+              />
+            </>
+          )
+        }
         <StyledDivider bottom />
       </FormContainer>
     </Container>

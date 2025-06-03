@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { darkTheme } from "@kleros/ui-components-library";
 import { useOpenContext } from "./MobileHeader";
 
@@ -30,6 +30,10 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
 `;
 
 const StyledButton = styled.button`
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
   color: ${darkTheme.klerosUIComponentsPrimaryText};
   text-decoration: none;
   font-size: 16px;
@@ -46,6 +50,7 @@ const links = [
 const Explore: React.FC = () => {
   const pathname = usePathname()
   const { toggleIsOpen } = useOpenContext();
+  const router = useRouter();
 
   return (
     <Container>
@@ -59,13 +64,18 @@ const Explore: React.FC = () => {
           >
             {text}
           </StyledLink>
-          <StyledButton
-            onClick={() => fetch("/api/logout", { method: "POST" })}
-          >
-            LogOut
-          </StyledButton>
         </LinkContainer>
       ))}
+      <LinkContainer>
+        <StyledButton
+          onClick={async () => {
+            await fetch("/api/logout", { method: "POST" })
+            router.push("/rules");
+          }}
+        >
+          LogOut
+        </StyledButton>
+      </LinkContainer>
     </Container>
   );
 };

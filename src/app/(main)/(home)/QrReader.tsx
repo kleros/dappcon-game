@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { QrReader as QRReader, QrReaderProps } from "react-qr-reader";
 import { darkTheme } from "@kleros/ui-components-library";
@@ -48,7 +48,7 @@ const Reader = styled(QRReader)`
 const QrReader: React.FC = () => {
   const [isScanning, setIsScanning] = useState<boolean>(true);
 
-  const OnResultFunction = (result: any) => {
+  const OnResultFunction = useCallback((result: any) => {
     if (result) {
       const isValid = /[0-9a-fA-F]{64}/.test(result.text);
       if (isValid) {
@@ -56,7 +56,7 @@ const QrReader: React.FC = () => {
         setIsScanning(false);
       }
     }
-  };
+  }, []);
 
   const readerProps: QrReaderProps = {
     constraints: { facingMode: "environment" }, // Use the back camera
