@@ -34,6 +34,7 @@ const links = [
   { to: "/rules", text: "Rules" },
   { to: "/leaderboard", text: "Leaderboard" },
   { to: "/about", text: "About Kleros" },
+  { to: "/logout", text: "LogOut" },
 ];
 
 const Explore: React.FC = () => {
