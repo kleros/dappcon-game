@@ -70,7 +70,9 @@ const Explore: React.FC = () => {
         <StyledButton
           onClick={async () => {
             await fetch("/api/logout", { method: "POST" })
+            toggleIsOpen();
             router.push("/rules");
+            router.refresh();
           }}
         >
           LogOut
