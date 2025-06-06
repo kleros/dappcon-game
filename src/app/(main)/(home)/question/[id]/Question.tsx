@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { darkTheme, Radio } from "@kleros/ui-components-library";
 import LightLinkButton from "@/components/LightLinkButton";
 import Timer from "@/components/Timer";
@@ -53,6 +53,8 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
   const expirytime =
     Number(question?.timestamp ? question.timestamp : 0) + QUESTION_TIMEOUT_WINDOW;
 
+  const router = useRouter();
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const [radioValue, setRadioValue] = useState<string | null>(null);
@@ -85,6 +87,9 @@ const Question: React.FC<QuestionProps> = ({ setConnected }) => {
     );
 
   if (error) {
+    router.push("/");
+    toast.error(error.message);
+
     return (
       <Container>
         <StyledText>{error.message}</StyledText>
