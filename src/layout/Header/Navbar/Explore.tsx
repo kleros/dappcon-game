@@ -69,8 +69,8 @@ const Explore: React.FC = () => {
       <LinkContainer>
         <StyledButton
           onClick={async () => {
-            await fetch("/api/logout", { method: "POST" })
-            router.push("/rules");
+            // await fetch("/api/logout", { method: "POST" })
+            // router.push("/rules");
           }}
         >
           LogOut
