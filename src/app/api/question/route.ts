@@ -25,19 +25,19 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (isGameEnded()) {
-    return new NextResponse("Game has ended", { status: 400 });
+    return new NextResponse("Game has ended", { status: 409 });
   }
 
   const decryptedData = await decryptData(id!);
   if (!decryptedData) {
     return new NextResponse("Invalid player QR, re-scan new QR", {
-      status: 400,
+      status: 409,
     });
   }
 
   if (decryptedData.userid === userId) {
     return new NextResponse("Oops, You can't connect with yourself", {
-      status: 400,
+      status: 409,
     });
   }
 
@@ -68,7 +68,7 @@ export const GET = async (request: NextRequest) => {
 
     const isAlreadyAnswered = await checkAlreadyAnswered(question.id, userId);
     if (isAlreadyAnswered) {
-      return new NextResponse("You're already connected!", { status: 400 });
+      return new NextResponse("You're already connected!", { status: 409 });
     }
 
     return new NextResponse(JSON.stringify(question), {
