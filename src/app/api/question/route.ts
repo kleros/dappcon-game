@@ -4,6 +4,18 @@ import { decrypt } from "@/lib/crypto";
 import { checkAlreadyAnswered, getQuestion } from "@/lib/supabase/queries";
 import { isGameEnded, QR_CODE_EXPIRY } from "@/lib/game.config";
 
+const GAME_ENDED = "Game has ended";
+const YOURSELF_ERROR = "Oops, You can't connect with yourself";
+const QR_EXPIRED = "QR expired, re-scan new QR";
+const ALREADY_CONNECTED = "You're already connected!";
+
+export const NO_RETRY_RESPONSES = [
+  GAME_ENDED,
+  YOURSELF_ERROR,
+  QR_EXPIRED,
+  ALREADY_CONNECTED,
+];
+
 const decryptData = async (
   id: string
 ): Promise<{ userid: string; timestamp: string } | undefined> => {
@@ -25,7 +37,7 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (isGameEnded()) {
-    return new NextResponse("Game has ended", { status: 409 });
+    return new NextResponse(GAME_ENDED, { status: 409 });
   }
 
   const decryptedData = await decryptData(id!);
@@ -36,7 +48,7 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (decryptedData.userid === userId) {
-    return new NextResponse("Oops, You can't connect with yourself", {
+    return new NextResponse(YOURSELF_ERROR, {
       status: 409,
     });
   }
@@ -49,7 +61,7 @@ export const GET = async (request: NextRequest) => {
     currentTime < tokenTime ||
     currentTime - tokenTime > QR_CODE_EXPIRY
   ) {
-    return new NextResponse("QR expired, re-scan new QR", { status: 408 });
+    return new NextResponse(QR_EXPIRED, { status: 408 });
   }
 
   const { data, error } = await getQuestion(decryptedData.userid);
@@ -68,7 +80,7 @@ export const GET = async (request: NextRequest) => {
 
     const isAlreadyAnswered = await checkAlreadyAnswered(question.id, userId);
     if (isAlreadyAnswered) {
-      return new NextResponse("You're already connected!", { status: 409 });
+      return new NextResponse(ALREADY_CONNECTED, { status: 409 });
     }
 
     return new NextResponse(JSON.stringify(question), {

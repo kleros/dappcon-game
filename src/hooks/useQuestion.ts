@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Database } from "@/types/supabase";
+import { NO_RETRY_RESPONSES } from "@/app/api/question/route";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"] & {
   timestamp: number;
@@ -12,6 +13,14 @@ export const useQuestion = (id: string) => {
     data: question,
   } = useQuery<Question>({
     queryKey: ["question", id],
+    retry: (count, error) => {
+      if (NO_RETRY_RESPONSES.includes(error.message)) {
+        return false;
+      } else if (count > 2) {
+        return false;
+      }
+      return true;
+    },
     queryFn: async () => {
       const response = await fetch(`/api/question?id=${id}`);
       if (!response.ok) {
