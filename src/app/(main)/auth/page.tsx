@@ -99,44 +99,30 @@ const Auth: React.FC = () => {
       </Heading>
       <FormContainer>
         <StyledDivider top />
-        <StyledText>Type your username to start</StyledText>
-        <LabeledInput
-          name="Username"
-          label="Username"
-          placeholder="Bob"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        {usernameError && <FormError>{usernameError}</FormError>}
-        <StyledLinkButton
-          text={isLoading ? "Authenticating..." : "Start"}
-          disabled={isLoading}
-          onClick={handleStart}
-        />
+        {token === TOKEN_NOT_FOUND
+          ? <StyledLinkButton text="Rules" url="/rules" />
+          : (
+            <>
+              <StyledText>Type your username to start</StyledText>
+              <LabeledInput
+                name="Username"
+                label="Username"
+                placeholder="Bob"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              {usernameError && <FormError>{usernameError}</FormError>}
+              <StyledLinkButton
+                text={isLoading ? "Authenticating..." : "Start"}
+                disabled={isLoading}
+                onClick={handleStart}
+              />
+            </>
+          )
+        }
         <StyledDivider bottom />
       </FormContainer>
     </Container>
   );
 };
-
-// {token === TOKEN_NOT_FOUND
-//   ? <StyledLinkButton text="Rules" url="/rules" />
-//   : (
-//     <>
-//       <StyledText>Type your username to start</StyledText>
-//       <LabeledInput
-//         name="Username"
-//         label="Username"
-//         placeholder="Bob"
-//         onChange={(e) => setUsername(e.target.value)}
-//       />
-//       {usernameError && <FormError>{usernameError}</FormError>}
-//       <StyledLinkButton
-//         text={isLoading ? "Authenticating..." : "Start"}
-//         disabled={isLoading}
-//         onClick={handleStart}
-//       />
-//     </>
-//   )
-// }
 
 export default Auth;
