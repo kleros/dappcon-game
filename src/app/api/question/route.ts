@@ -3,18 +3,12 @@ import { getUserId, TOKEN_COOKIE, NotAuthenticatedResponse } from "@/lib/auth";
 import { decrypt } from "@/lib/crypto";
 import { checkAlreadyAnswered, getQuestion } from "@/lib/supabase/queries";
 import { isGameEnded, QR_CODE_EXPIRY } from "@/lib/game.config";
-
-const GAME_ENDED = "Game has ended";
-const YOURSELF_ERROR = "Oops, You can't connect with yourself";
-const QR_EXPIRED = "QR expired, re-scan new QR";
-const ALREADY_CONNECTED = "You're already connected!";
-
-export const NO_RETRY_RESPONSES = [
+import {
   GAME_ENDED,
   YOURSELF_ERROR,
   QR_EXPIRED,
   ALREADY_CONNECTED,
-];
+} from "@/app/api/utils";
 
 const decryptData = async (
   id: string

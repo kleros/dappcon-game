@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Database } from "@/types/supabase";
-import { NO_RETRY_RESPONSES } from "@/app/api/question/route";
+import { NO_RETRY_RESPONSES } from "@/app/api/utils";
 
 type Question = Database["public"]["Tables"]["questions"]["Row"] & {
   timestamp: number;
