@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 import RewardsIcon from "@/assets/rewards-dark.svg";
 import LightLinkButton from "@/components/LightLinkButton";
-import { isGameEnded } from "@/lib/game.config";
+import { isGameEnded, isGameConcluded } from "@/lib/game.config";
 import Table from "./Table";
 import UserPoints from "./UserPoints";
 
@@ -32,6 +32,7 @@ const StyledLinkButton = styled(LightLinkButton)`
 
 const Leaderboard: React.FC = () => {
   const gameEnded = useMemo(() => isGameEnded(), []);
+  const gameConcluded = useMemo(() => isGameConcluded(), []);
   return (
     <Container>
       <Heading>Leaderboard</Heading>
@@ -41,11 +42,17 @@ const Leaderboard: React.FC = () => {
         The PNK shown is just an estimate, the true value will depend on your
         performance
       </Note>
-      <StyledLinkButton
-        url={gameEnded ? "/leaderboard/claim" : "/"}
-        Icon={gameEnded && RewardsIcon}
-        text={gameEnded ? "Claim my Rewards" : "Return"}
-      />
+      {
+        gameConcluded
+          ? null
+          : (
+            <StyledLinkButton
+              url={gameEnded ? "/leaderboard/claim" : "/"}
+              Icon={gameEnded && RewardsIcon}
+              text={gameEnded ? "Claim my Rewards" : "Return"}
+            />
+          )
+      }
     </Container>
   );
 };
