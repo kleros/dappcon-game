@@ -2,11 +2,11 @@
 // export const GAME_END_TIMESTAMP = 1750291199; // Timestamp in seconds when the game ends
 // const GAME_CONCLUDES_TIMESTAMP = 1749998988; // Timestamp in seconds when the game concludes
 // export const TOKEN_DISTRIBUTION_TIMESTAMP = 1759998988; // Timestamp in seconds for token distribution
-export const GAME_END_TIMESTAMP = 1749810234; // Timestamp in seconds when the game ends
-const GAME_CONCLUDES_TIMESTAMP = 1749811178; // Timestamp in seconds when the game concludes
-export const TOKEN_DISTRIBUTION_TIMESTAMP = 1749824819; // Timestamp in seconds for token distribution
+export const GAME_END_TIMESTAMP = 1749823200; // Timestamp in seconds when the game ends
+const GAME_CONCLUDES_TIMESTAMP = 1749824100; // Timestamp in seconds when the game concludes
+export const TOKEN_DISTRIBUTION_TIMESTAMP = 1749827700; // Timestamp in seconds for token distribution
 
-export const QR_CODE_EXPIRY =2 * 60 * 1000; // (2 minutes) Expiry time in seconds for QR code
+export const QR_CODE_EXPIRY = 2 * 60 * 1000; // (2 minutes) Expiry time in seconds for QR code
 export const QUESTION_TIMEOUT_WINDOW = 3 * 60 * 1000; // (3 minutes) Player cannot answer after question gets timeout
 
 export const TOTAL_PNK = 1000000; // Total PNK to be distributed
