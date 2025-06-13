@@ -3,7 +3,7 @@
 // const GAME_CONCLUDES_TIMESTAMP = 1749998988; // Timestamp in seconds when the game concludes
 // export const TOKEN_DISTRIBUTION_TIMESTAMP = 1759998988; // Timestamp in seconds for token distribution
 export const GAME_END_TIMESTAMP = 1749810234; // Timestamp in seconds when the game ends
-const GAME_CONCLUDES_TIMESTAMP = 1749817619; // Timestamp in seconds when the game concludes
+const GAME_CONCLUDES_TIMESTAMP = 1749811178; // Timestamp in seconds when the game concludes
 export const TOKEN_DISTRIBUTION_TIMESTAMP = 1749824819; // Timestamp in seconds for token distribution
 
 export const QR_CODE_EXPIRY =2 * 60 * 1000; // (2 minutes) Expiry time in seconds for QR code
