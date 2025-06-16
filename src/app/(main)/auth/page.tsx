@@ -115,7 +115,7 @@ const Auth: React.FC = () => {
                 placeholder="Bob"
                 value={username}
                 onChange={(e) => {
-                  if (/^[A-Za-z]+$/.test(e.target.value)) {
+                  if (/^[A-Za-z]+$/.test(e.target.value) || e.target.value === "") {
                     setUsername(e.target.value);
                   }
                 }}
