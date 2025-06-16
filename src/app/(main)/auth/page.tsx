@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Filter } from "bad-words";
 import Divider from "@/assets/divider.svg";
 import LabeledInput from "@/components/LabeledInput";
 import LightLinkButton from "@/components/LightLinkButton";
@@ -8,7 +9,7 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { toast } from "react-toastify";
 
 const MIN_USERNAME_LENGTH = 3;
-const MAX_USERNAME_LENGTH = 16;
+const MAX_USERNAME_LENGTH = 12;
 const TOKEN_NOT_FOUND = "not_found";
 
 const Container = styled.div`
@@ -67,6 +68,7 @@ const Auth: React.FC = () => {
   }, []);
 
   const handleStart = async () => {
+    const filter = new Filter();
     if (
       username.length < MIN_USERNAME_LENGTH ||
       username.length > MAX_USERNAME_LENGTH
@@ -74,6 +76,9 @@ const Auth: React.FC = () => {
       setUsernameError(
         `Username must be between ${MIN_USERNAME_LENGTH} - ${MAX_USERNAME_LENGTH} characters in length.`
       );
+      return;
+    } else if (filter.isProfane(username) || !/^[A-Za-z]+$/.test(username)) {
+      setUsernameError("Username not allowed.");
       return;
     }
     setUsernameError(null);
@@ -108,7 +113,12 @@ const Auth: React.FC = () => {
                 name="Username"
                 label="Username"
                 placeholder="Bob"
-                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                onChange={(e) => {
+                  if (/^[A-Za-z]+$/.test(e.target.value)) {
+                    setUsername(e.target.value);
+                  }
+                }}
               />
               {usernameError && <FormError>{usernameError}</FormError>}
               <StyledLinkButton
