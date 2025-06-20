@@ -27,7 +27,14 @@ const Note = styled.p`
 
 const StyledLinkButton = styled(LightLinkButton)`
   width: 100%;
+`;
+
+const StyledDiv = styled.div`
   margin-top: 28px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 const Leaderboard: React.FC = () => {
@@ -46,11 +53,19 @@ const Leaderboard: React.FC = () => {
         gameConcluded
           ? null
           : (
-            <StyledLinkButton
-              url={gameEnded ? "/leaderboard/claim" : "/"}
-              Icon={gameEnded && RewardsIcon}
-              text={gameEnded ? "Claim my Rewards" : "Return"}
-            />
+            <StyledDiv>
+              <StyledLinkButton
+                url={gameEnded ? "/leaderboard/claim" : "/"}
+                Icon={gameEnded && RewardsIcon}
+                text={gameEnded ? "Claim my Rewards" : "Return"}
+              />
+              <StyledLinkButton
+                url="https://cdn.kleros.link/ipfs/QmSJU4UmDbrqLwchsqXwFwZaxbob45r1QE5rTRagpr3Wpq"
+                text="Check the answers!"
+                target="_blank"
+                rel="noopener"
+              />
+            </StyledDiv>
           )
       }
     </Container>

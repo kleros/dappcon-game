@@ -14,6 +14,8 @@ interface ILightButton {
   Icon?: React.FC<React.SVGAttributes<SVGElement>>;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
+  target?: string;
+  rel?: string;
   className?: string;
 }
 
@@ -23,10 +25,12 @@ const LightButton: React.FC<ILightButton> = ({
   Icon,
   onClick,
   disabled,
+  target,
+  rel,
   className,
 }) =>
   url ? (
-    <Link href={url} passHref>
+    <Link href={url} passHref {...{ target, rel }}>
       <StyledButton
         variant="primary"
         small
