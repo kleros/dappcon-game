@@ -47,7 +47,7 @@ const UserPoints: React.FC = () => {
         <TableCellWrapper isGameConcluded={gameConcluded}>
           <TableCell>{data.connections}</TableCell>
           {gameConcluded && <TableCell>{data.points}</TableCell>}
-          <TableCell>~{formatNumber(data.token)} PNK</TableCell>
+          <TableCell>{formatNumber(data.token)} PNK</TableCell>
         </TableCellWrapper>
       </TableContainer>
     </Container>

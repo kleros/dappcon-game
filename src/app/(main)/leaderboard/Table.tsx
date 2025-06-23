@@ -69,7 +69,7 @@ const Table: React.FC = () => {
           <TableCellWrapper isGameConcluded={gameConcluded}>
             <TableCell>{item.connections}</TableCell>
             {gameConcluded && <TableCell>{item.points}</TableCell>}
-            <TableCell>~{formatNumber(item.token)} PNK</TableCell>
+            <TableCell>{formatNumber(item.token)} PNK</TableCell>
           </TableCellWrapper>
         </React.Fragment>
       ))}
