@@ -12,7 +12,7 @@ import LabeledInput from "@/components/LabeledInput";
 import useClaimReward from "@/hooks/useClaimReward";
 import { isGameConcluded } from "@/lib/game.config";
 import { formatNumber } from "@/lib/utils";
-import { TableContainer, TableCellWrapper, TableCell } from "../Table";
+import { TableContainer, TableCell } from "../Table";
 import UserPoints from "../UserPoints";
 
 const Container = styled.div`
@@ -87,17 +87,13 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
   return (
     <Container>
       <Heading>Claim my Rewards</Heading>
-      <TableContainer>
-        <TableCellWrapper rankHeader>
-          <TableCell>Rankings</TableCell>
-        </TableCellWrapper>
-        <TableCellWrapper isGameConcluded={gameConcluded}>
-          <TableCell>Connections</TableCell>
-          {gameConcluded && <TableCell>Pts.</TableCell>}
-          <TableCell>
-            Est. <RewardsIcon />
-          </TableCell>
-        </TableCellWrapper>
+      <TableContainer isGameConcluded={gameConcluded}>
+        <TableCell top={true}>Ranking</TableCell>
+        <TableCell>Connections</TableCell>
+        {gameConcluded && <TableCell>Pts.</TableCell>}
+        <TableCell>
+          Est. <RewardsIcon />
+        </TableCell>
       </TableContainer>
       <UserPoints />
       <ClaimAmount>
