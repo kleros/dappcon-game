@@ -66,6 +66,16 @@ export const getLeaderboard = async () => {
   return { data, error };
 };
 
+export const getLeaderboardConcluded = async () => {
+  const { data, error } = await supabase
+    .from("leaderboard")
+    .select()
+    .gt("points", 0)
+    .order("points", { ascending: false })
+    .order("last_connected", { ascending: true });
+  return { data, error };
+};
+
 export const getUserStats = async (user_id: string) => {
   const { data, error } = await supabase.rpc("get_user_stats", {
     user_id_params: user_id,

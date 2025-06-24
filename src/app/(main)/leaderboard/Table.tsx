@@ -8,31 +8,19 @@ import { Database } from "@/types/supabase";
 import { isGameConcluded } from "@/lib/game.config";
 import { formatNumber } from "@/lib/utils";
 
-export const TableContainer = styled.div`
+export const TableContainer = styled.div<{ isGameConcluded?: boolean }>`
   display: grid;
-  grid-template-columns: 1fr 2fr;
   padding: 10px;
+  grid-template-columns: ${({ isGameConcluded }) =>
+    isGameConcluded ? "1fr 2fr 2fr 1fr 2fr" : "1fr 2fr 1fr 2fr"};
 `;
 
-export const TableCell = styled.div<{ rank?: boolean }>`
+export const TableCell = styled.div<{ rank?: boolean; top?: boolean; align?: "left" | "right" }>`
   padding-bottom: 8px;
   font-weight: ${({ rank }) => (rank ? "600" : "200")};
   color: ${({ rank }) => rank && darkTheme.klerosUIComponentsSecondaryPurple};
-`;
-
-export const TableCellWrapper = styled.div<{
-  rank?: boolean;
-  rankHeader?: boolean;
-  isGameConcluded?: boolean;
-}>`
-  display: grid;
-  grid-template-columns: ${({ rank, isGameConcluded }) =>
-    rank ? "1fr 3fr" : isGameConcluded ? "repeat(3, 1fr)" : "repeat(2, 1fr)"};
-
-  text-align: ${({ rankHeader, rank }) =>
-    rankHeader ? "left" : rank ? "left" : "right"};
-
-  ${({ rankHeader }) => rankHeader && "grid-template-columns: 1fr"};
+  ${({ top }) => top && "grid-column: span 2;"}
+  ${({ align }) => align === "left" ? "text-align: left;" : align === "right" ? "text-align: right;" : ""}
 `;
 
 type LeaderboardItem = Database["public"]["Tables"]["leaderboard"]["Row"];
@@ -49,28 +37,24 @@ const Table: React.FC = () => {
   if (error) return <div>an error occured</div>;
 
   return (
-    <TableContainer>
-      <TableCellWrapper rankHeader>
-        <TableCell>Top 10</TableCell>
-      </TableCellWrapper>
-      <TableCellWrapper isGameConcluded={gameConcluded}>
-        <TableCell>Connections</TableCell>
-        {gameConcluded && <TableCell>Pts.</TableCell>}
-        <TableCell>
-          Est. <RewardsIcon />
-        </TableCell>
-      </TableCellWrapper>
+    <TableContainer isGameConcluded={isGameConcluded()}>
+      <TableCell top={true} align="left">Top Players</TableCell>
+      <TableCell>Connections</TableCell>
+      {gameConcluded && <TableCell>Pts.</TableCell>}
+      <TableCell>
+        Est. <RewardsIcon />
+      </TableCell>
       {data?.map((item: LeaderboardItem, index: number) => (
         <React.Fragment key={index}>
-          <TableCellWrapper rank>
-            <TableCell rank>#{index + 1}</TableCell>
-            <TableCell>{item.username.length > 8 ? `${item.username.slice(0, 8)}...` : item.username}</TableCell>
-          </TableCellWrapper>
-          <TableCellWrapper isGameConcluded={gameConcluded}>
-            <TableCell>{item.connections}</TableCell>
-            {gameConcluded && <TableCell>{item.points}</TableCell>}
-            <TableCell>{formatNumber(item.token)} PNK</TableCell>
-          </TableCellWrapper>
+          <TableCell rank>#{index + 1}</TableCell>
+          <TableCell align="left">
+            {item.username.length > 12
+              ? `${item.username.slice(0, 12)}...`
+              : item.username}
+          </TableCell>
+          <TableCell>{item.connections}</TableCell>
+          {gameConcluded && <TableCell>{item.points}</TableCell>}
+          <TableCell>{formatNumber(item.token)} PNK</TableCell>
         </React.Fragment>
       ))}
     </TableContainer>

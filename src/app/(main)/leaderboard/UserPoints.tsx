@@ -6,7 +6,7 @@ import { darkTheme } from "@kleros/ui-components-library";
 import { Database } from "@/types/supabase";
 import { isGameConcluded } from "@/lib/game.config";
 import { formatNumber } from "@/lib/utils";
-import { TableContainer, TableCellWrapper, TableCell } from "./Table";
+import { TableContainer, TableCell } from "./Table";
 
 const Container = styled.div`
   border: 2px solid ${darkTheme.klerosUIComponentsSecondaryBlue};
@@ -35,20 +35,16 @@ const UserPoints: React.FC = () => {
 
   return (
     <Container>
-      <TableContainer>
-        <TableCellWrapper rank>
-          <MyRank>#{data.rank}</MyRank>
-          <TableCell>
-            {data.username.length > 8
-              ? `${data.username.slice(0, 8)}...`
-              : data.username}
-          </TableCell>
-        </TableCellWrapper>
-        <TableCellWrapper isGameConcluded={gameConcluded}>
-          <TableCell>{data.connections}</TableCell>
-          {gameConcluded && <TableCell>{data.points}</TableCell>}
-          <TableCell>{formatNumber(data.token)} PNK</TableCell>
-        </TableCellWrapper>
+      <TableContainer isGameConcluded={gameConcluded}>
+        <MyRank>#{data.rank}</MyRank>
+        <TableCell>
+          {data.username.length > 12
+            ? `${data.username.slice(0, 12)}...`
+            : data.username}
+        </TableCell>
+        <TableCell>{data.connections}</TableCell>
+        {gameConcluded && <TableCell>{data.points}</TableCell>}
+        <TableCell>{formatNumber(data.token)} PNK</TableCell>
       </TableContainer>
     </Container>
   );

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   getLeaderboard,
+  getLeaderboardConcluded,
   getTotalConnectionCount,
 } from "@/lib/supabase/queries";
 import { isGameConcluded, TOTAL_PNK } from "@/lib/game.config";
@@ -8,7 +9,9 @@ import { isGameConcluded, TOTAL_PNK } from "@/lib/game.config";
 export const dynamic = "force-dynamic";
 
 export const GET = async () => {
-  const { data: leaderboard, error: leaderboardError } = await getLeaderboard();
+  const { data: leaderboard, error: leaderboardError } = isGameConcluded()
+    ? await getLeaderboardConcluded()
+    : await getLeaderboard();
   const { data: totalConnectionCount, error: totalConnectionCountError } =
     await getTotalConnectionCount();
 
