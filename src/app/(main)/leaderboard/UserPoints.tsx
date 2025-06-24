@@ -37,7 +37,7 @@ const UserPoints: React.FC = () => {
     <Container>
       <TableContainer isGameConcluded={gameConcluded}>
         <MyRank>#{data.rank}</MyRank>
-        <TableCell>
+        <TableCell align="left">
           {data.username.length > 12
             ? `${data.username.slice(0, 12)}...`
             : data.username}
