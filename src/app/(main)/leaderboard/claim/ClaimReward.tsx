@@ -87,8 +87,8 @@ const ClaimReward: React.FC<ClaimRewardProps> = ({ setClaimed }) => {
   return (
     <Container>
       <Heading>Claim my Rewards</Heading>
-      <TableContainer isGameConcluded={gameConcluded}>
-        <TableCell top={true}>Ranking</TableCell>
+      <TableContainer isGameConcluded={gameConcluded} noPadding={true}>
+        <TableCell top={true} align="left">Ranking</TableCell>
         <TableCell>Connections</TableCell>
         {gameConcluded && <TableCell>Pts.</TableCell>}
         <TableCell>

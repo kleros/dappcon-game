@@ -8,9 +8,10 @@ import { Database } from "@/types/supabase";
 import { isGameConcluded } from "@/lib/game.config";
 import { formatNumber } from "@/lib/utils";
 
-export const TableContainer = styled.div<{ isGameConcluded?: boolean }>`
+export const TableContainer = styled.div<{ isGameConcluded?: boolean; noPadding?: boolean }>`
   display: grid;
   padding: 10px;
+  ${({ noPadding }) => noPadding ? "padding-bottom: 0px;" : ""}
   grid-template-columns: ${({ isGameConcluded }) =>
     isGameConcluded ? "1fr 2fr 2fr 1fr 2fr" : "1fr 2fr 1fr 2fr"};
 `;
