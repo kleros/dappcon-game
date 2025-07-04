@@ -58,7 +58,7 @@ const Leaderboard: React.FC = () => {
           gameEnded
             ? (
               <StyledLinkButton
-                url="https://cdn.kleros.link/ipfs/QmSJU4UmDbrqLwchsqXwFwZaxbob45r1QE5rTRagpr3Wpq"
+                url="https://cdn.kleros.link/ipfs/QmQx3abvPopY7oWKn8QjLrQXUQWWWuvwehUbLBDz7Kkzva"
                 text="Check the answers!"
                 target="_blank"
                 rel="noopener"
